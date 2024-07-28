@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -17,11 +18,20 @@ export default async function AuthButton() {
     return redirect("/login");
   };
 
+
   return user ? (
-    <div className="flex items-center gap-9">
-      {user.email}
+    <div className="flex items-center gap-11">
+      <Link href="/Customer/C_Pro_Edit">
+        <Image
+          src="/De_Profile.jpeg"
+          alt="Profile"
+          className="border border-primary rounded-full hover:border-white duration-300"
+          width={40}
+          height={40}
+        />
+      </Link>
       <form action={signOut}>
-        <button className="py-2 px-4 rounded-md border hover:bg-white hover:text-[#1F3A93] duration-300">
+        <button className="py-2 px-4 rounded-md border hover:bg-white hover:text-primary duration-300">
           Logout
         </button>
       </form>
@@ -29,7 +39,7 @@ export default async function AuthButton() {
   ) : (
     <Link
       href="/login"
-      className="py-2 px-5 flex rounded-md border hover:bg-white hover:text-[#1F3A93] duration-300"
+      className="py-2 px-5 flex rounded-md border hover:bg-white hover:text-primary duration-300"
     >
       Login
     </Link>
