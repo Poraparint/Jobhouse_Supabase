@@ -1,5 +1,6 @@
-import { GeistSans } from "geist/font/sans";
+import { Kanit } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -7,9 +8,16 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Jobhouse",
+  description: "No bro.",
+  icons: [{ url: "/favicon/favicon.ico", href: "/favicon/favicon.ico" }],
 };
+
+const kanit = Kanit({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-prompt",
+});
 
 export default function RootLayout({
   children,
@@ -17,9 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={kanit.variable} data-theme="mytheme">
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
+          <Navbar/>
           {children}
         </main>
       </body>

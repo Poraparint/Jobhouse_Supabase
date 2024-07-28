@@ -2,8 +2,10 @@ import DeployButton from "@/components/DeployButton";
 import AuthButton from "@/components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
-import Header from "@/components/Header";
+import Home from "@/components/Home";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -17,22 +19,27 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <div className="w-full">
-        <div className="py-6 font-bold bg-purple-950 text-center">
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-            <DeployButton />
+    <div className="Page">
+      <div className="">
+        <nav className="BoxShadow w-full bg-primary opacity-90 text-white items-center py-2 flex justify-between px-5 fixed left-0 top-0">
+          <div className="Nav-one h-[100%] flex">
+            <Link href="/">
+              <Image src="/Job.png" width={150} height={100} alt="Logo" />
+            </Link>
+          </div>
+          <div className="flex justify-between items-center gap-5 p-3 text-sm">
+            <Link href="/User/Jobboard">
+              <button className="py-2 px-4 rounded-md bg-[white] hover:bg-[#d7d7d7] text-primary  duration-300">
+                บอร์ดประกาศงาน
+              </button>
+            </Link>
             <AuthButton />
           </div>
         </nav>
       </div>
 
       <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
-        <Header />
+        <Home />
         <main className="flex-1 flex flex-col gap-6">
           <h2 className="font-bold text-4xl mb-4">Next steps</h2>
           <FetchDataSteps />
@@ -40,17 +47,7 @@ export default async function ProtectedPage() {
       </div>
 
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{" "}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Supabase
-          </a>
-        </p>
+        <DeployButton />
       </footer>
     </div>
   );

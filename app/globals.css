@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base {
   :root {
     --background: 200 20% 98%;
     --btn-background: 200 10% 91%;
@@ -18,10 +18,43 @@
       --foreground: 200 20% 96%;
     }
   }
-}
+} */
 
 @layer base {
   * {
     @apply border-foreground/20;
   }
+  body {
+    font-family: var(--font-prompt);
+    font-style: normal;
+    background-image: url(../public/BG.jpeg); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .Page{
+    margin: 6rem 0rem 6rem 0rem;
+}
+
+.BoxShadow{
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 3px;
+}
+
+.Filterd_Job{
+    padding: 15px 0px 15px 0px;
+    text-align: center;
+    width: 100%;
+    color: #919191;
+}
+.Filterd_Job:hover{
+    color: #050C9C;
+    transition: all 0.3s;
+}
+
+@media (max-width : 800px) {
+    .Filterd_Job{
+        font-size: 13px;
+    }
+}
 }
