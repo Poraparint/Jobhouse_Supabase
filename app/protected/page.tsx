@@ -27,7 +27,6 @@ export default async function ProtectedPage() {
         <p>dup</p>
 
         <p>dup</p>
-        <DeployButton />
         <p>dup</p>
       </div>
 

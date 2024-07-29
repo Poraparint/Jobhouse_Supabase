@@ -1,40 +1,46 @@
+import React from 'react'
 import Link from "next/link";
-import Image from "next/image";
+import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
-import Loginwith from "@/components/Loginwith";
+import { SubmitButton } from '../login/submit-button';
+import Image from 'next/image';
+import Loginwith from '@/components/Loginwith';
 
+export default function Signup({
 
-export default function Login({
-  searchParams,
-}: {
+    searchParams,
+} : {
   searchParams: { message: string };
 }) {
-  const signIn = async (formData: FormData) => {
+    const signUp = async (formData: FormData) => {
     "use server";
 
+    const origin = headers().get("origin");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${origin}/auth/callback`,
+      },
     });
 
     if (error) {
+      console.log(error);
       return redirect("/login?message=Could not authenticate user");
     }
-    return redirect("/protected");
+
+    return redirect("/login?message=Check email to continue sign in process");
   };
-  
-  
 
   return (
     <div className="Page bg-white border border-secondary mx-9 rounded-lg shadow-xl">
       <Link
-        href="/Signup"
+        href="/login"
         className="text-secondary items-center m-5 w-[30%] flex group text-xm max-md:text-xs"
       >
         <svg
@@ -51,11 +57,11 @@ export default function Login({
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        สมัครสมาชิก
+        เข้าสู่ระบบ
       </Link>
       <div className="flex justify-between m-6 gap-7 rounded-lg">
         <div className="w-full flex flex-col text-center">
-          <h1 className="text-4xl font-semibold text-secondary">เข้าสู่ระบบ</h1>
+          <h1 className="text-4xl font-semibold text-secondary">สมัครสมาชิก</h1>
           <form className="flex flex-col justify-center gap-4 py-5 mx-2 mt-6 items-center">
             <label className="input border-secondary flex items-center gap-2 w-full">
               <svg
@@ -96,11 +102,11 @@ export default function Login({
               />
             </label>
             <SubmitButton
-              formAction={signIn}
-              className="bg-primary rounded-md w-[70%] py-3 border border-white text-white "
-              pendingText="Signing In..."
+              formAction={signUp}
+              className="bg-primary rounded-md w-[70%] py-3 border border-white text-white"
+              pendingText="Signing Up..."
             >
-              เข้าสู่ระบบ
+              สมัครสมาชิก
             </SubmitButton>
             {searchParams?.message && (
               <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
@@ -108,7 +114,6 @@ export default function Login({
               </p>
             )}
           </form>
-
           <Loginwith />
         </div>
         <div className="border max-lg:hidden w-full opacity-45 rounded-lg">

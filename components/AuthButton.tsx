@@ -37,11 +37,20 @@ export default async function AuthButton() {
       </form>
     </div>
   ) : (
-    <Link
+      <div className="flex gap-3">
+        <Link
       href="/login"
       className="py-2 px-5 flex rounded-md border hover:bg-white hover:text-primary duration-300"
     >
       Login
+      </Link>
+      <Link
+      href="/Signup"
+      className="py-2 px-5 flex rounded-md border hover:bg-white hover:text-primary duration-300"
+    >
+      Sign Up
     </Link>
+      </div>
+    
   );
 }
