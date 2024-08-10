@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import Comment from "@/components/Comment";
+import Link from "next/link";
 
 export default async function Profile() {
   const supabase = createClient();
@@ -18,7 +19,7 @@ export default async function Profile() {
   return (
     <div className="Page w-[80%]">
       <div className="flex gap-5 text-secondary justify-between">
-        <div className="p-5 gap-7 rounded-lg border border-secondary shadow-xl bg-gray-100 flex flex-col items-center">
+        <div className="p-5 gap-7 rounded-lg border border-secondary shadow-xl bg-gray-100 flex flex-col items-center w-[40%]">
           <Image
             src="/De_Profile.jpeg"
             alt="Profile"
@@ -26,12 +27,15 @@ export default async function Profile() {
             width={100}
             height={100}
           />
-          <button className="py-1 px-4 bg-primary shadow-xl rounded-md border border-secondary text-white hover:border-white duration-300">
-            เพิ่มงาน
-          </button>
+          <Link href="/Customer/CusAddwork">
+            <button className="py-1 px-4 bg-primary shadow-xl rounded-md border border-secondary text-white hover:border-white duration-300">
+              เพิ่มงาน
+            </button>
+          </Link>
+
           <p className="text-lg">{user.email}</p>
         </div>
-        <div className="border flex flex-col gap-5 py-5 px-8 bg-gray-100 w-[60%] rounded-lg">
+        <div className="border flex flex-col gap-5 py-5 shadow-xl px-8 bg-gray-100 w-[70%] rounded-lg">
           <div className="flex flex-col gap-4">
             <h1 className="text-lg">แก้ไขรูปโปรไฟล์</h1>
             <Image

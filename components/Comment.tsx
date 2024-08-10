@@ -19,7 +19,7 @@ export default function Comment() {
     }, [])
 
   return (
-    <div className="mt-5 text-secondary flex flex-col gap-5">
+    <div className="mt-5 text-secondary flex flex-col gap-5 w-[50%] max-lg:w-full">
         <h1 className='ml-5 text-primary text-2xl font-medium'>รีวิวจากฟรีแลนซ์</h1>
         <hr className='border-2 border-primary rounded-full'/>  
         {data.map((index, note) => (
