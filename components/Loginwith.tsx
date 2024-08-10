@@ -5,11 +5,15 @@ import { createClient } from "@/utils/supabase/client";
 
 export default function Loginwith() {
 
-  const signInWithGithub = async () => {
+  const signInWithGoogle = async () => {
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "github",
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
       options: {
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
         redirectTo: "http://localhost:3000/auth/callback",
       },
     });
@@ -21,31 +25,20 @@ export default function Loginwith() {
   };
 
   return (
-    <div className="my-5 flex justify-center gap-4">
-      <Image
-        src="/Google.svg"
-        alt="Profile"
-        className="rounded-full cursor-pointer"
-        width={40}
-        height={40}
-        onClick={() => alert("Google sign-in not implemented")} // ใส่ฟังก์ชันของ Google ตามที่ต้องการ
-      />
-      <Image
-        src="/Facebook.svg"
-        alt="Profile"
-        className="rounded-full cursor-pointer"
-        width={40}
-        height={40}
-        onClick={() => alert("Facebook sign-in not implemented")} // ใส่ฟังก์ชันของ Facebook ตามที่ต้องการ
-      />
-      <Image
-        src="/Github.svg"
-        alt="Profile"
-        className="rounded-full cursor-pointer"
-        width={40}
-        height={40}
-        onClick={signInWithGithub} // ใช้ฟังก์ชัน signInWithGithub
-      />
+    <div className="flex flex-col items-center text-secondary w-[70%] self-center">
+      <div
+        onClick={signInWithGoogle}
+        className="py-1 cursor-pointer gap-3 px-2 border border-secondary rounded-md flex items-center justify-evenly hover:bg-[#f0f0f0] duration-300"
+      >
+        <Image
+          src="/google.png"
+          alt="Profile"
+          className="rounded-full "
+          width={35}
+          height={35}
+        />
+        <p>Sign in with Google</p>
+      </div>
     </div>
   );
 }

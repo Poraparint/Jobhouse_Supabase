@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from '../login/submit-button';
 import Image from 'next/image';
-import Loginwith from '@/components/Loginwith';
+
 
 export default function Signup({
 
@@ -39,29 +39,31 @@ export default function Signup({
 
   return (
     <div className="Page bg-white border border-secondary mx-9 rounded-lg shadow-xl">
-      <Link
-        href="/login"
-        className="text-secondary items-center m-5 w-[30%] flex group text-xm max-md:text-xs"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
-        เข้าสู่ระบบ
-      </Link>
       <div className="flex justify-between m-6 gap-7 rounded-lg">
         <div className="w-full flex flex-col text-center">
-          <h1 className="text-4xl font-semibold text-secondary">สมัครสมาชิก</h1>
+          <Link
+            href="/login"
+            className="text-secondary items-center w-[40%] flex group text-xm max-md:text-xs"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>{" "}
+            เข้าสู่ระบบ
+          </Link>
+          <h1 className="text-4xl font-semibold text-secondary my-8">
+            สมัครสมาชิก
+          </h1>
           <form className="flex flex-col justify-center gap-4 py-5 mx-2 mt-6 items-center">
             <label className="input border-secondary flex items-center gap-2 w-full">
               <svg
@@ -101,6 +103,7 @@ export default function Signup({
                 required
               />
             </label>
+            
             <SubmitButton
               formAction={signUp}
               className="bg-primary rounded-md w-[70%] py-3 border border-white text-white"
@@ -114,9 +117,8 @@ export default function Signup({
               </p>
             )}
           </form>
-          <Loginwith />
         </div>
-        <div className="border max-lg:hidden w-full opacity-45 rounded-lg">
+        <div className="border max-lg:hidden w-full opacity-60 rounded-lg duration-300 hover:opacity-80">
           <Image
             src="/ArunTemple.jpeg"
             width={800}
