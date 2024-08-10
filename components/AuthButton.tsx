@@ -21,6 +21,9 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-11">
+      <div className="max-lg:text-xs">
+        <p>สมัครเป็นฟรีแลนซ์</p>
+      </div>
       <Link href="/Customer/C_Pro_Edit">
         <Image
           src="/De_Profile.jpeg"

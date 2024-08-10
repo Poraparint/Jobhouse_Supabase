@@ -28,7 +28,7 @@ export default function Navbar() {
         </div>
         <div className="flex gap-5 items-center p-3 text-sm">
           <Link href="/User/Jobboard">
-            <button className="py-2 px-4 rounded-md bg-white hover:bg-[#d7d7d7] text-primary mr-5 duration-300">
+            <button className="py-2 px-4 rounded-md bg-white hover:bg-[#d7d7d7] text-primary mr-5 duration-300 max-lg:text-xs">
               บอร์ดประกาศงาน
             </button>
           </Link>
