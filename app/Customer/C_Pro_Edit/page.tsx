@@ -7,19 +7,22 @@ export default async function Profile() {
   const supabase = createClient();
 
   const { data: { user },error, } = await supabase.auth.getUser();
-
-
-  let { data: users } = await supabase
-    .from("users")
-    .select("username");
     
-
   if (error) {
     return <div>Error fetching user: {error.message}</div>;
   }
 
   if (!user) {
     return <div>User not logged in</div>;
+  }
+
+  const { data: works, error: workError } = await supabase
+    .from("cuswork")
+    .select("*")
+    .eq("user_id", user.id);
+
+  if (workError) {
+    return <div>Error fetching works: {workError.message}</div>;
   }
 
   return (
@@ -64,9 +67,46 @@ export default async function Profile() {
               />
             </form>
           </div>
+          <div className="mt-5">
+            <h2 className="text-lg mb-4">งานของคุณ</h2>
+          </div>
         </div>
       </div>
-      <Comment />
+      <div className="flex gap-7 mt-5 max-lg:flex-col">
+        <div className="w-[70%] max-lg:w-full mt-5">
+          <div className="text-primary text-2xl font-medium flex flex-col gap-5">
+            <h1 className="ml-5">งานของคุณ</h1>
+            <hr className="border-2 border-primary rounded-full" />
+          </div>
+          {works && works.length > 0 ? (
+            <div className="flex flex-col gap-4 mt-5">
+              {works.map((work) => (
+                <div
+                  key={work.id}
+                  className="text-secondary tracking-wide border border-secondary rounded-md p-5 shadow-xl flex flex-col gap-5 bg-white"
+                >
+                  <h1 className="text-primary font-semibold text-lg">
+                    {work.work_name}
+                  </h1>
+                  <hr className="border-primary rounded-lg" />
+                  <p> - {work.work_detail}</p>
+                  <div className="flex justify-between mt-4">
+                    <p>กำหนดส่ง: {work.work_deadline}</p>
+                    <div className="flex gap-1">
+                      <p>งบประมาณ : </p>
+                      <p className="text-baht"> {work.work_budget} ฿</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>คุณยังไม่มีงานที่เพิ่มในระบบ</p>
+          )}
+        </div>
+
+        <Comment />
+      </div>
     </div>
   );
 }
