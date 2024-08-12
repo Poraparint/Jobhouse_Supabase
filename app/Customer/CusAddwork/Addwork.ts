@@ -39,5 +39,5 @@ export const addWork = async (formData: FormData) => {
     return false;
   }
 
-  return redirect("/Customer/C_Pro_Edit");
+  return true;
 };

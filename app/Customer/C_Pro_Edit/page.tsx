@@ -8,6 +8,12 @@ export default async function Profile() {
 
   const { data: { user },error, } = await supabase.auth.getUser();
 
+
+  let { data: users } = await supabase
+    .from("users")
+    .select("username");
+    
+
   if (error) {
     return <div>Error fetching user: {error.message}</div>;
   }

@@ -18,7 +18,7 @@ export default function TodayDate() {
 
 
   return (
-    <div className='text-primary text-[1.5rem] border border-primary shadow-xl py-2 px-4 rounded-lg'>
+    <div className='text-primary text-[1.5rem] py-2 px-4'>
       Today : {currentDate}
     </div>
   )

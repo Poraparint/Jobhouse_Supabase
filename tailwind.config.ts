@@ -9,10 +9,10 @@ module.exports = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        third: "#EDEDED",
+        third: "#919191",
         baht: "#238326",
         fourth: "#4E4E4E",
-        
+
         btn: {
           background: "hsl(var(--btn-background))",
           "background-hover": "hsl(var(--btn-background-hover))",
@@ -24,14 +24,11 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          "primary": "#1F3A93",
-          "secondary": "#3D3D3D",
-          
+          primary: "#1F3A93",
+          secondary: "#3D3D3D",
         },
       },
     ],
   },
-  plugins: [
-    require('daisyui'),
-  ],
+  plugins: [require("daisyui")],
 };
