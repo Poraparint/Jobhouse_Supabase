@@ -26,7 +26,7 @@ export default async function Profile() {
   }
 
   return (
-    <div className="Page w-[80%]">
+    <div className="Page w-[80%] mb-20">
       <div className="flex gap-5 text-secondary justify-between">
         <div className="p-5 gap-7 rounded-lg border border-secondary shadow-xl bg-gray-100 flex flex-col items-center w-[40%]">
           <Image
@@ -66,9 +66,6 @@ export default async function Profile() {
                 value={user.email}
               />
             </form>
-          </div>
-          <div className="mt-5">
-            <h2 className="text-lg mb-4">งานของคุณ</h2>
           </div>
         </div>
       </div>

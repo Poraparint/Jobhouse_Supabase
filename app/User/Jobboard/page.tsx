@@ -8,7 +8,8 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 function jobboard() {
   const [data, setData] = useState<any>([]);
-  const [search, setSearch] = useState<any>("");
+  const [search, setSearch] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
 
   const fetch = async () => {
     const supabase = createClient();
@@ -22,14 +23,14 @@ function jobboard() {
     fetch();
   }, []);
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("th");
+    return new Date(dateString).toLocaleDateString("th", options);
   };
 
   return (
     <div className="Page w-full flex flex-col items-center">
-      <div className="w-[90%] border bg-white border-third shadow-2xl rounded-md p-7 tracking-wider">
+      <div className="w-[90%] border bg-white border-third shadow-2xl p-7 rounded-md tracking-wider">
         <div className="flex justify-between w-full items-center">
           <h1 className="text-primary font-medium text-[2.5rem]">
             บอร์ดประกาศงาน
@@ -37,22 +38,44 @@ function jobboard() {
           <TodayDate />
         </div>
         <hr className="border-primary border rounded-md my-3" />
-        <input
-          type="text"
-          name="search"
-          onChange={(e) => setSearch(e.target.value)}
-          className="my-5 border border-secondary w-[50%] p-3 text-xl rounded-lg outline-none text-primary max-md:w-full"
-          placeholder="Search. . ."
-        />
-        <div className="mt-10 text-secondary grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1">
+        <div className="flex flex-col">
+          <input
+            type="text"
+            name="search"
+            onChange={(e) => setSearch(e.target.value)}
+            className="my-5 border border-secondary w-[50%] p-3 text-xl rounded-lg outline-none text-primary max-md:w-full"
+            placeholder="Search. . ."
+          />
+          <select
+            name="category"
+            onChange={(e) => setCategory(e.target.value)}
+            className="my-5 border border-secondary w-[50%] p-3 text-xl rounded-lg outline-none text-primary max-md:w-full"
+          >
+            <option value="">All Categories</option>
+            <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
+            <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
+            <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
+            <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
+            <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
+            <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
+            <option value="บทความ">บทความ</option>
+            <option value="วางแพลนเที่ยว">วางแพลนเที่ยว</option>
+          </select>
+        </div>
+        <hr className="border-third rounded-full my-10"/>
+        
+        <div className="text-secondary grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1">
           {data && data.length > 0 ? (
             data
               .filter((note) => {
-                return search.toLowerCase() === ""
-                  ? note
-                  : note.work_name.toLowerCase().includes(search);
+                const matchesSearch =
+                  search.toLowerCase() === "" ||
+                  note.work_name.toLowerCase().includes(search);
+                const matchesCategory =
+                  category === "" || note.work_catagory === category;
+                return matchesSearch && matchesCategory;
               })
-              .map((note, index) => (
+              .map((note, index : number) => (
                 <div
                   key={index}
                   className="border border-third rounded-md p-5 shadow-xl flex flex-col gap-5 bg-white"
@@ -87,7 +110,7 @@ function jobboard() {
                 </div>
               ))
           ) : (
-            <div className="text-center p-3 text-lg">No Names Added</div>
+            <div className="text-center p-3 text-lg w-full">ไม่มีการเพิ่มงานเข้ามา</div>
           )}
         </div>
       </div>

@@ -18,7 +18,12 @@ export default function Signup({
     const email = formData.get("email") as string;
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirm_password") as string;
     const supabase = createClient();
+
+    if (password !== confirmPassword) {
+      return redirect("/login?message=Could not authenticate user");
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -88,6 +93,23 @@ export default function Signup({
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
+                fill="currentColor"
+                className="h-4 w-4 opacity-70"
+              >
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+              </svg>
+              <input
+                type="text"
+                className="grow "
+                placeholder="Username"
+                name="username"
+                required
+              />
+            </label>
+            <label className="input border-secondary flex items-center gap-2 w-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
                 fill="#3D3D3D"
                 className="h-4 w-4"
               >
@@ -105,20 +127,24 @@ export default function Signup({
                 required
               />
             </label>
-            <label className="input border-secondary flex items-center gap-2 w-full mb-16">
+            <label className="input border-secondary flex items-center gap-2 w-full mb-7">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
-                fill="currentColor"
-                className="h-4 w-4 opacity-70"
+                fill="#3D3D3D"
+                className="h-4 w-4"
               >
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+                <path
+                  fillRule="evenodd"
+                  d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+                  clipRule="evenodd"
+                />
               </svg>
               <input
-                type="text"
-                className="grow "
-                placeholder="Username"
-                name="username"
+                type="password"
+                className="grow"
+                placeholder="Confirm Password"
+                name="confirm_password"
                 required
               />
             </label>
