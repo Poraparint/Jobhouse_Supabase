@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import Comment from "@/components/Comment";
 import Link from "next/link";
+import ShowWork from "../Components/ShowWork";
+
 
 export default async function Profile() {
   const supabase = createClient();
@@ -47,23 +49,39 @@ export default async function Profile() {
         <div className="border flex flex-col gap-5 py-5 shadow-xl px-8 bg-gray-100 w-[70%] rounded-lg">
           <div className="flex flex-col gap-4">
             <h1 className="text-lg">แก้ไขรูปโปรไฟล์</h1>
-            <Image
-              src="/De_Profile.jpeg"
-              alt="Profile"
-              className="border ml-2 border-white rounded-full hover:border-secondary duration-300"
-              width={60}
-              height={60}
-            />
+            <div className="flex gap-4">
+              <Image
+                src="/De_Profile.jpeg"
+                alt="Profile"
+                className="border ml-2 border-white rounded-full hover:border-secondary duration-300"
+                width={60}
+                height={60}
+              />
+              <Image
+                src="/Edit.svg"
+                alt="Edit"
+                className=""
+                width={20}
+                height={20}
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <h1 className="text-lg">ชื่อที่แสดงในระบบ</h1>
-            <form>
+            <form className="flex gap-4">
               <input
                 type="text"
                 name=""
                 id=""
-                className="text-primary ml-2 border border-secondary rounded-md p-2"
+                className="text-primary border border-secondary rounded-md p-2"
                 value={user.email}
+              />
+              <Image
+                src="/Edit.svg"
+                alt="Edit"
+                className=""
+                width={20}
+                height={20}
               />
             </form>
           </div>
@@ -78,23 +96,7 @@ export default async function Profile() {
           {works && works.length > 0 ? (
             <div className="flex flex-col gap-4 mt-5">
               {works.map((work) => (
-                <div
-                  key={work.id}
-                  className="text-secondary tracking-wide border border-secondary rounded-md p-5 shadow-xl flex flex-col gap-5 bg-white"
-                >
-                  <h1 className="text-primary font-semibold text-lg">
-                    {work.work_name}
-                  </h1>
-                  <hr className="border-primary rounded-lg" />
-                  <p> - {work.work_detail}</p>
-                  <div className="flex justify-between mt-4">
-                    <p>กำหนดส่ง: {work.work_deadline}</p>
-                    <div className="flex gap-1">
-                      <p>งบประมาณ : </p>
-                      <p className="text-baht"> {work.work_budget} ฿</p>
-                    </div>
-                  </div>
-                </div>
+                <ShowWork key={work.id} work={work} />
               ))}
             </div>
           ) : (

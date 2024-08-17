@@ -117,12 +117,9 @@ function CusAddwork() {
           </div>
         </div>
         <div className="flex justify-end text-xl gap-5 mt-14">
-          <button className="border border-secondary text-secondary p-2 rounded-md">
-            ย้อนกลับ
-          </button>
           <button
             type="submit"
-            className="border border-primary bg-primary text-white py-2 px-4 rounded-md"
+            className="border border-primary bg-primary text-white py-2 px-8 rounded-md"
           >
             ส่งงาน
           </button>
