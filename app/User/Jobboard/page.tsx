@@ -63,12 +63,13 @@ function jobboard() {
         </div>
         <hr className="border-third rounded-full my-10" />
 
-        <div className="border text-secondary ">
-          <div className="flex justify-between border text-center">
-            <div className="border w-full">ชื่องาน</div>
-            <div className="border w-full">หมวดหมู่</div>
-            <div className="border w-full">ราคา</div>
-            <div className="border w-full">กำหนดส่งงาน</div>
+        <div className="">
+          <div className="flex justify-between items-center text-center text-white bg-green-600 py-6">
+            <div className="w-full">หัวข้อ</div>
+            <div className="w-full">หมวดหมู่</div>
+            <div className="w-full">ส่งมอบงานภายใน</div>
+            <div className="w-full">งบประมาณ</div>
+            <div className="w-full">วันที่สร้างโพส</div>
           </div>
           {data && data.length > 0 ? (
             data
@@ -83,12 +84,13 @@ function jobboard() {
               .map((note, index: number) => (
                 <div
                   key={index}
-                  className="flex justify-between border text-center"
+                  className="flex justify-between border text-center py-6 px-4"
                 >
-                  <div className="border w-full">{note.work_name}</div>
-                  <div className="border w-full">{note.work_catagory}</div>
-                  <div className="border w-full">{note.work_budget}</div>
-                  <div className="border w-full">{note.work_deadline}</div>
+                  <div className="w-full">{note.work_name}</div>
+                  <div className="w-full">{note.work_catagory}</div>
+                  <div className="w-full">{formatDate(note.work_deadline)}</div>
+                  <div className="w-full">{note.work_budget}</div>
+                  <div className="w-full">{formatDate(note.created_at)}</div>
                 </div>
               ))
           ) : (

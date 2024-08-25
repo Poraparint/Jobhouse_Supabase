@@ -2,8 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
+import { SubmitButton } from "@/components/forms/submit-button";
 import Loginwith from "@/components/Loginwith";
+import { encodedRedirect } from "@/utils/utils";
+import { Label } from "@/components/forms/label";
 
 
 export default function Login({
@@ -24,7 +26,7 @@ export default function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return encodedRedirect("error", "/login", "Could not authenticate user");
     }
     return redirect("/protected");
   };
@@ -33,10 +35,9 @@ export default function Login({
 
   return (
     <div className="Page bg-white border border-secondary mx-9 rounded-lg shadow-xl">
-      
       <div className="flex justify-between m-6 gap-7 rounded-lg">
         <div className="w-full flex flex-col text-center">
-              <Link
+          <Link
             href="/Signup"
             className="text-secondary items-center w-[40%] flex group text-xm max-md:text-xs"
           >
@@ -56,7 +57,9 @@ export default function Login({
             </svg>{" "}
             สมัครสมาชิก
           </Link>
-          <h1 className="text-4xl font-semibold text-secondary my-8">เข้าสู่ระบบ</h1>
+          <h1 className="text-4xl font-semibold text-secondary my-8">
+            เข้าสู่ระบบ
+          </h1>
           <form className="flex flex-col justify-center gap-4 py-5 mx-2 mt-6 items-center">
             <label className="input border-secondary flex items-center gap-2 w-full">
               <svg
@@ -74,6 +77,16 @@ export default function Login({
                 placeholder="Email"
                 required
               />
+              <div className="flex justify-between items-center">
+                <Label htmlFor="password">Password</Label>
+
+                <Link
+                  className="text-sm text-blue-600 underline"
+                  href="/forgot-password"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
             </label>
             <label className="input border-secondary flex items-center gap-2 w-full mb-16">
               <svg
