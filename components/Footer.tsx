@@ -1,11 +1,12 @@
 import React from "react"
-import './Footer.css'
+import DeployButton from "./DeployButton"
 
 export default function Footer() {
   return (
     
-      <footer className='bg-primary  text-white tracking-wide w-[100%]'>
-        <div className='upper-footer p-10 gap-[5rem] justify-end flex'>
+    <footer className='bg-primary mt-[25rem] max-md:hidden items-center flex justify-between text-white tracking-wide w-full'>
+      <DeployButton/>
+        <div className='upper-footer w-[70%] py-10 gap-[5rem] justify-end flex'>
           <div>
             <h1 className='font-semibold text-2xl'>Menu</h1>
             <ul className='text-sm mt-3 font-light flex flex-col gap-3'>

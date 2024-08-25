@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <nav className="BoxShadow w-full bg-primary text-white opacity-90 drop-shadow-xl items-center py-2 flex justify-between px-5 fixed left-0 top-0">
+      <nav className="BoxShadow w-full bg-primary text-white drop-shadow-xl items-center flex justify-between px-5 fixed left-0 top-0">
         <div className="Nav-one h-[100%] flex">
           <Link href="/">
             <Image src="/Job.png" width={150} height={100} alt="Logo" />
@@ -28,7 +28,7 @@ export default function Navbar() {
         </div>
         <div className="flex gap-5 items-center p-3 text-sm">
           <Link href="/User/Jobboard">
-            <button className="py-2 px-4 rounded-md bg-white hover:bg-[#d7d7d7] text-primary  duration-300">
+            <button className="py-2 px-4 rounded-md bg-white hover:bg-[#d7d7d7] text-primary mr-5 duration-300 max-lg:text-xs">
               บอร์ดประกาศงาน
             </button>
           </Link>
