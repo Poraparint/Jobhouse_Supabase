@@ -43,7 +43,7 @@ export default async function Profile() {
               เพิ่มงาน
             </button>
           </Link>
-          <Link href="/">
+          <Link href="/Customer/FreeAddwork">
             <button className="py-1 px-4 bg-primary shadow-xl rounded-md border border-secondary text-white hover:border-white duration-300">
               Freelancer
             </button>
