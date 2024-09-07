@@ -1,4 +1,3 @@
-// FreeAddwork.tsx
 "use client";
 import { addWork } from "./FAddwork";
 import Swal from "sweetalert2";
@@ -7,13 +6,14 @@ import { useState, useRef } from "react";
 
 function FreeAddwork() {
   const router = useRouter();
+  const [mainImg, setMainImg] = useState<File | null>(null); // State for main image
   const [files, setFiles] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const mainImgInputRef = useRef<HTMLInputElement>(null); // Separate ref for main image input
+  const fileInputRef = useRef<HTMLInputElement>(null); // Ref for work_ex input
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const newFiles = Array.from(e.dataTransfer.files);
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  const handleMainImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setMainImg(file);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +35,11 @@ function FreeAddwork() {
 
     if (!deadline) {
       formData.set("work_deadline", "-");
+    }
+
+    // Append main image to form data if available
+    if (mainImg) {
+      formData.append("work_mainimg", mainImg);
     }
 
     files.forEach((file, index) => {
@@ -61,11 +66,11 @@ function FreeAddwork() {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const handleClickMainImg = () => {
+    mainImgInputRef.current?.click();
   };
 
-  const handleClick = () => {
+  const handleClickEx = () => {
     fileInputRef.current?.click();
   };
 
@@ -90,12 +95,49 @@ function FreeAddwork() {
         ></textarea>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
+            <div
+              className="border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center"
+              onClick={handleClickMainImg}
+            >
+              <input
+                type="file"
+                name="work_mainimg"
+                className="hidden"
+                onChange={handleMainImgChange}
+                ref={mainImgInputRef}
+              />
+              <div className="text-center">
+                {mainImg ? (
+                  <div className="relative">
+                    <img
+                      src={URL.createObjectURL(mainImg)}
+                      alt={mainImg.name}
+                      className="w-32 h-32 object-cover rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setMainImg(null)}
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                    >
+                      x
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-secondary">
+                    Drag & Drop or click to upload main image
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between gap-9 max-lg:flex-wrap">
+          <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">รูปผลงานของฉัน</h1>
             <div
               className="border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onClick={handleClick}
+              onClick={handleClickEx}
             >
               <input
                 type="file"
@@ -127,7 +169,7 @@ function FreeAddwork() {
                   </div>
                 ) : (
                   <p className="text-secondary">
-                    Drag & Drop files here or click to upload
+                    Drag & Drop or click to upload files
                   </p>
                 )}
               </div>
@@ -167,6 +209,7 @@ function FreeAddwork() {
               name="work_deadline"
               required
             >
+              <option value="ไม่มี">ไม่มีกําหนด</option>
               <option value="3-5 วัน">3-5 วัน</option>
               <option value="1 อาทิตย์">1 อาทิตย์</option>
               <option value="2 อาทิตย์">2 อาทิตย์</option>
@@ -178,10 +221,10 @@ function FreeAddwork() {
         <div className="w-1/4 flex flex-col gap-5">
           <h1 className="ml-5 text-primary text-xl">งบประมาณ</h1>
           <input
-            name="work_budget"
             type="text"
-            placeholder="ระบุจำนวนเงินแลกเปลี่ยน"
-            className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+            name="work_budget"
+            placeholder="งบประมาณ"
+            className="text-lg text-secondary border border-third rounded-md p-2 outline-none"
             required
           />
         </div>
@@ -190,7 +233,7 @@ function FreeAddwork() {
             type="submit"
             className="border border-primary bg-primary text-white py-2 px-8 rounded-md"
           >
-            ส่งงาน
+            เพิ่มงาน
           </button>
         </div>
       </form>
@@ -199,3 +242,4 @@ function FreeAddwork() {
 }
 
 export default FreeAddwork;
+ 
