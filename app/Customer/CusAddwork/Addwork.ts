@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 export const addWork = async (formData: FormData) => {
-  const work_name = formData.get("work_name") as string;
+    const work_name = formData.get("work_name") as string;
     const work_detail = formData.get("work_detail") as string;
     const work_ex = formData.get("work_ex") as string;
     const work_budget = formData.get("work_budget") as string;
@@ -22,7 +22,9 @@ export const addWork = async (formData: FormData) => {
     return false;
   }
 
-    const { data, error } = await supabase.from("cuswork").insert([
+  const { data, error } = await supabase
+    .from("cuswork")
+    .insert([
       {
         work_name,
         work_detail,

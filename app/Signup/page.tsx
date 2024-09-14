@@ -2,27 +2,27 @@ import React from "react";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "../login/submit-button";
+import { SubmitButton } from "@/components/forms/submit-button";
+import { FormMessage, Message } from "@/components/forms/form-message";
 import Image from "next/image";
-
-export default function Signup({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+import { encodedRedirect } from "@/utils/utils";
+export default function Signup({ searchParams }: { searchParams: Message }) {
   const signUp = async (formData: FormData) => {
     "use server";
 
     const origin = headers().get("origin");
-    const email = formData.get("email") as string;
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
     const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirm_password") as string;
+    const confirmPassword = formData.get("confirm_password")?.toString();
     const supabase = createClient();
 
+    if (!email || !password) {
+      return { error: "Email and password are required" };
+    }
+
     if (password !== confirmPassword) {
-      return redirect("/login?message=Could not authenticate user");
+      return { error: "gay" };
     }
 
     const { error } = await supabase.auth.signUp({
@@ -37,12 +37,24 @@ export default function Signup({
     });
 
     if (error) {
-      console.log(error);
-      return redirect("/login?message=Could not authenticate user");
+      console.error(error.code + " " + error.message);
+      return encodedRedirect("error", "/signup", "Error trying to sign up");
+    } else {
+      return encodedRedirect(
+        "success",
+        "/Signup",
+        "Thanks for signing up! Please check your email for a verification link."
+      );
     }
-
-    return redirect("/login?message=Check email to continue sign in process");
   };
+
+  if ("message" in searchParams) {
+    return (
+      <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
+        <FormMessage message={searchParams} />
+      </div>
+    );
+  }
 
   return (
     <div className="Page bg-white border border-secondary mx-9 rounded-lg shadow-xl">
@@ -156,11 +168,7 @@ export default function Signup({
             >
               สมัครสมาชิก
             </SubmitButton>
-            {searchParams?.message && (
-              <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-                {searchParams.message}
-              </p>
-            )}
+            <FormMessage message={searchParams} />
           </form>
         </div>
         <div className="border max-lg:hidden w-full opacity-60 rounded-lg duration-300 hover:opacity-80">

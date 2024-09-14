@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <nav className="BoxShadow w-full bg-primary text-white drop-shadow-xl items-center flex justify-between px-5 fixed left-0 top-0">
+      <nav className="BoxShadow w-full bg-primary text-white drop-shadow-xl items-center flex justify-between px-5 fixed left-0 top-0 z-50">
         <div className="Nav-one h-[100%] flex">
           <Link href="/">
             <Image src="/Job.png" width={150} height={100} alt="Logo" />

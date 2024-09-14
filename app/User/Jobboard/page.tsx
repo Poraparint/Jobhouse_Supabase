@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import TodayDate from "@/components/TodayDate";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 function jobboard() {
   const [data, setData] = useState<any>([]);
@@ -62,9 +61,16 @@ function jobboard() {
             <option value="วางแพลนเที่ยว">วางแพลนเที่ยว</option>
           </select>
         </div>
-        <hr className="border-third rounded-full my-10"/>
-        
-        <div className="text-secondary grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1">
+        <hr className="border-third rounded-full my-10" />
+
+        <div className="">
+          <div className="flex justify-between items-center text-center text-white bg-green-600 py-6">
+            <div className="w-full">หัวข้อ</div>
+            <div className="w-full">หมวดหมู่</div>
+            <div className="w-full">ส่งมอบงานภายใน</div>
+            <div className="w-full">งบประมาณ</div>
+            <div className="w-full">วันที่สร้างโพส</div>
+          </div>
           {data && data.length > 0 ? (
             data
               .filter((note) => {
@@ -75,42 +81,22 @@ function jobboard() {
                   category === "" || note.work_catagory === category;
                 return matchesSearch && matchesCategory;
               })
-              .map((note, index : number) => (
+              .map((note, index: number) => (
                 <div
                   key={index}
-                  className="border border-third rounded-md p-5 shadow-xl flex flex-col gap-5 bg-white"
+                  className="flex justify-between border text-center py-6 px-4"
                 >
-                  <div className="flex gap-3">
-                    <Image
-                      src="/Case.svg"
-                      alt="Briefcase"
-                      className=""
-                      width={20}
-                      height={20}
-                    />
-                    <h1 className="text-primary text-xl">{note.work_name}</h1>
-                  </div>
-                  <hr className="border-third rounded-full" />
-                  <div className="ml-1 mt-5 flex gap-1">
-                    <p className="text-primary">หมวดหมู่ :</p>
-                    <p>{note.work_catagory}</p>
-                  </div>
-                  <div className="ml-1 mt-5 flex gap-1">
-                    <p className="text-primary">งบประมาณ :</p>
-                    <p>{note.work_budget} ฿</p>
-                  </div>
-                  <div className="ml-1 mt-5 flex gap-1">
-                    <p className="text-primary">ลงประกาศเมื่อ :</p>
-                    <p>{formatDate(note.created_at)}</p>
-                  </div>
-                  <div className="ml-1 mt-5 flex gap-1">
-                    <p className="text-primary">กำหนดส่งงาน :</p>
-                    <p>{note.work_deadline}</p>
-                  </div>
+                  <div className="w-full">{note.work_name}</div>
+                  <div className="w-full">{note.work_catagory}</div>
+                  <div className="w-full">{formatDate(note.work_deadline)}</div>
+                  <div className="w-full">{note.work_budget}</div>
+                  <div className="w-full">{formatDate(note.created_at)}</div>
                 </div>
               ))
           ) : (
-            <div className="text-center p-3 text-lg w-full">ไม่มีการเพิ่มงานเข้ามา</div>
+            <div className="text-center p-3 text-lg w-full">
+              ไม่มีการเพิ่มงานเข้ามา
+            </div>
           )}
         </div>
       </div>

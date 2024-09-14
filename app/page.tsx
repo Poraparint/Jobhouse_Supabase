@@ -22,15 +22,7 @@ export default async function Index() {
     <div className="w-full">
       <div className="Page w-full flex flex-col gap-20">
         {isSupabaseConnected ? <Home /> : <ConnectSupabaseSteps />}
-        <p>dup</p>
-        <p>dup</p>
-        <p>dup</p>
-        <p>dup</p>
-        <p>dup</p>
-
-        <p>dup</p>
-
-        <p>dup</p>
+        
       </div>
       <Footer />
     </div>
