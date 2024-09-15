@@ -14,6 +14,7 @@ module.exports = {
         third: "#919191",
         baht: "#238326",
         fourth: "#4E4E4E",
+        light: "#D9D9D9",
 
         btn: {
           background: "hsl(var(--btn-background))",
