@@ -3,6 +3,8 @@ import { addWork } from "./FAddwork";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
+import Image from "next/image";
+
 
 function FreeAddwork() {
   const router = useRouter();
@@ -55,7 +57,7 @@ function FreeAddwork() {
         showConfirmButton: false,
         timer: 1000,
       }).then(() => {
-        router.push(`/Customer/Freelance_product/${newId}`);
+        router.push(`/Customer/C_Pro_Edit`);
       });
     } else {
       Swal.fire({
@@ -77,7 +79,9 @@ function FreeAddwork() {
   return (
     <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
-        <h1 className="text-primary font-semibold text-3xl mb-9">บอร์ดประกาศงาน</h1>
+        <h1 className="text-primary font-semibold text-3xl mb-9">
+          บอร์ดประกาศงาน
+        </h1>
         <h1 className="ml-5 text-primary text-xl">ชื่องาน</h1>
         <input
           name="work_name"
@@ -97,7 +101,7 @@ function FreeAddwork() {
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
             <div
-              className="border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center"
+              className="cursor-pointer border border-third h-[15rem] rounded-md p-2 text-lg text-secondary flex items-center justify-center hover:bg-slate-100 duration-300"
               onClick={handleClickMainImg}
             >
               <input
@@ -107,7 +111,7 @@ function FreeAddwork() {
                 onChange={handleMainImgChange}
                 ref={mainImgInputRef}
               />
-              <div className="text-center">
+              <div className="text-center ">
                 {mainImg ? (
                   <div className="relative">
                     <img
@@ -124,9 +128,7 @@ function FreeAddwork() {
                     </button>
                   </div>
                 ) : (
-                  <p className="text-secondary">
-                    Drag & Drop or click to upload main image
-                  </p>
+                  <i className="fa-solid fa-camera text-9xl text-light"></i>
                 )}
               </div>
             </div>
@@ -134,9 +136,11 @@ function FreeAddwork() {
         </div>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">รูปผลงานของฉัน</h1>
+            <h1 className="ml-5 text-primary text-xl">
+              รูปผลงานเพิ่มเติม (สูงสุดไม่ควรเกิน 5 รูป)
+            </h1>
             <div
-              className="border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center"
+              className="cursor-pointer border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center hover:bg-slate-100 duration-300"
               onClick={handleClickEx}
             >
               <input
@@ -168,20 +172,18 @@ function FreeAddwork() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-secondary">
-                    Drag & Drop or click to upload files
-                  </p>
+                  <i className="fa-solid fa-camera text-9xl text-light"></i>
                 )}
               </div>
             </div>
           </div>
         </div>
         <div>
-          <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
+          <h1 className="ml-5 text-primary text-xl">สิ่งที่ลูกค้าจะได้รับ</h1>
           <textarea
             name="work_Exdetail"
-            placeholder="รายละเอียดงานของคุณ"
-            className="h-[3rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
+            placeholder="รายละเอียดสิ่งที่ลูกค้าจะได้รับ"
+            className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary mt-4"
           ></textarea>
         </div>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
@@ -192,6 +194,7 @@ function FreeAddwork() {
               name="work_catagory"
               required
             >
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
               <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
               <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
               <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
@@ -203,13 +206,13 @@ function FreeAddwork() {
             </select>
           </div>
           <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">กําหนดส่งงาน</h1>
+            <h1 className="ml-5 text-primary text-xl">กําหนดเวลาการทำงาน</h1>
             <select
               className="border text-lg border-third bg-primary p-2 rounded-md text-white"
               name="work_deadline"
               required
             >
-              <option value="ไม่มี">ไม่มีกําหนด</option>
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
               <option value="3-5 วัน">3-5 วัน</option>
               <option value="1 อาทิตย์">1 อาทิตย์</option>
               <option value="2 อาทิตย์">2 อาทิตย์</option>
@@ -217,21 +220,22 @@ function FreeAddwork() {
               <option value="3 เดือน">3 เดือน</option>
             </select>
           </div>
+          <div className="flex flex-col gap-5 w-full">
+            <h1 className="ml-5 text-primary text-xl">ราคา</h1>
+            <input
+              type="text"
+              name="work_budget"
+              placeholder="ราคา (฿)"
+              className="text-lg text-baht border border-third rounded-md p-2 outline-none "
+              required
+            />
+          </div>
         </div>
-        <div className="w-1/4 flex flex-col gap-5">
-          <h1 className="ml-5 text-primary text-xl">งบประมาณ</h1>
-          <input
-            type="text"
-            name="work_budget"
-            placeholder="งบประมาณ"
-            className="text-lg text-secondary border border-third rounded-md p-2 outline-none"
-            required
-          />
-        </div>
+
         <div className="flex justify-end text-xl gap-5 mt-14">
           <button
             type="submit"
-            className="border border-primary bg-primary text-white py-2 px-8 rounded-md"
+            className="btn btn-primary border text-white py-2 px-8 font-normal text-lg"
           >
             เพิ่มงาน
           </button>

@@ -1,6 +1,7 @@
 import { Kanit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`

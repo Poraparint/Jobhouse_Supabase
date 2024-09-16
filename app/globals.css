@@ -52,6 +52,11 @@
     transition: all 0.3s;
 }
 
+details .btn{
+  height: 2rem !important;
+  min-height: 2rem !important;
+}
+
 @media (max-width : 800px) {
     .Filterd_Job{
         font-size: 13px;
