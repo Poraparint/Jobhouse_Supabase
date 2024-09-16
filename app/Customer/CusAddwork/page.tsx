@@ -104,16 +104,20 @@ function CusAddwork() {
             </select>
           </div>
           <div className="w-full flex flex-col gap-5">
-            <div className="flex gap-3 items-center">
-              <h1 className="ml-5 text-primary text-xl">กำหนดส่งงาน</h1>
-              <h1 className="text-third">*ถ้าไม่มีไม่ต้องใส่</h1>
-            </div>
-
-            <input
+          <h1 className="ml-5 text-primary text-xl">ส่งงานใน</h1>
+          <select
+              className="border text-lg border-third p-2 rounded-md text-secondary"
               name="work_deadline"
-              type="date"
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
-            />
+              id=""
+              required
+            >
+              <option value="ไม่กำหนด">ไม่กำหนด</option>
+            <option value="3-5 วัน">3-5 วัน</option>
+            <option value="1 อาทิตย์">1 อาทิตย์</option>
+            <option value="2 อาทิตย์">2 อาทิตย์</option>
+            <option value="1 เดือน">1 เดือน</option>
+            <option value="2 เดือน">2 เดือน</option>
+            </select>
           </div>
         </div>
         <div className="flex justify-end text-xl gap-5 mt-14">
