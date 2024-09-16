@@ -34,7 +34,7 @@ function jobboard() {
   return (
     <div className="Page w-full flex flex-col items-center">
       <div className="w-[90%] border bg-white border-third shadow-2xl p-7 rounded-md tracking-wider">
-        <div>รูปภาพ</div>
+      <div>รูปภาพ</div>
         <div className="flex justify-between w-full items-center">
           <h1 className="text-primary font-medium text-[2.5rem]">
             บอร์ดประกาศงาน
