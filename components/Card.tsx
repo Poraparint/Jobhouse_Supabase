@@ -35,16 +35,12 @@ export default function Card({search, category, deadline }: CardProps) {
           .filter((note) => {
             const matchesSearch =
               search.toString() === "" ||
-                note.users.username.toString().includes(search);
-                 const matchesDeadline =
-                   deadline === "" || note.work_deadline === deadline;
+              note.users.username.toString().includes(search);
+            const matchesDeadline =
+              deadline === "" || note.work_deadline === deadline;
             const matchesCategory =
               category === "" || note.work_catagory === category;
-            return (
-              matchesSearch &&
-              matchesCategory &&
-              matchesDeadline
-            );
+            return matchesSearch && matchesCategory && matchesDeadline;
           })
           .map((note, index: number) => (
             <div key={index} className="card bg-base-100 shadow-xl w-full">
@@ -67,7 +63,7 @@ export default function Card({search, category, deadline }: CardProps) {
                     <div className="relative w-7 h-7 rounded-full">
                       <Image
                         className="rounded-full"
-                        src={note.users.avatar_url}
+                        src={note.users.avatar_url || "/De_Profile.jpeg"}
                         alt="Avatar"
                         layout="fill"
                         objectFit="cover"
