@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Card from "./Card";
-import Search from "./Searchbar";
+import Search from "./Search";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
