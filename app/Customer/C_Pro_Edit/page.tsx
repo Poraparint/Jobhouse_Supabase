@@ -82,7 +82,7 @@ export default function C_Pro_Edit() {
   return (
     <div className="Page w-[80%] mb-20">
       <div className="flex gap-5 text-secondary justify-between">
-        <div className="relative p-9 gap-7 rounded-lg shadow-xl border border-third bg-gray-100 flex flex-col items-center w-[40%]">
+        <div className="relative p-9 gap-7 rounded-lg shadow-xl flex flex-col items-center w-[40%] border-[0.5px] border-light bg-slate-50">
           {/* ปุ่มเปิด modal */}
           <div
             onClick={() => setShowEdit(true)}
@@ -103,7 +103,15 @@ export default function C_Pro_Edit() {
               />
             </div>
           ) : (
-            <div>No Avatar</div>
+            <div className="relative w-40 h-40 border rounded-full max-lg:w-20 max-lg:h-20 max-lg:mt-8 duration-300">
+              <Image
+                className="rounded-full"
+                src="/De_Profile.jpeg"
+                alt="Avatar"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
           )}
           {userData?.username ? (
             <p className="font-medium text-2xl text-secondary">
@@ -122,7 +130,7 @@ export default function C_Pro_Edit() {
           </button>
         </div>
 
-        <div className="border border-third p-4 shadow-xl bg-gray-100 w-[70%] rounded-lg relative">
+        <div className=" p-4 shadow-xl w-[70%] rounded-lg relative border-[0.5px] border-light bg-slate-50">
           {/* Modal แก้ไขโปรไฟล์ */}
           {userData?.userdetails ? (
             <div className="h-full">
@@ -154,7 +162,7 @@ export default function C_Pro_Edit() {
           )}
         </div>
 
-        <Comment />
+        {/* <Comment /> */}
       </div>
 
       {/* เมื่อ showEdit เป็น true จะแสดงฟอร์ม */}

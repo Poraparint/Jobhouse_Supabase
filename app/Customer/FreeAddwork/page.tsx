@@ -57,7 +57,7 @@ function FreeAddwork() {
         showConfirmButton: false,
         timer: 1000,
       }).then(() => {
-        router.push(`/Customer/C_Pro_Edit/Edit`);
+        router.push(`/Customer/C_Pro_Edit`);
       });
     } else {
       Swal.fire({
@@ -101,7 +101,7 @@ function FreeAddwork() {
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
             <div
-              className="cursor-pointer border border-third h-[15rem] rounded-md p-2 text-lg text-secondary flex items-center justify-center hover:bg-gray-200 duration-300"
+              className="cursor-pointer border border-third h-[15rem] rounded-md p-2 text-lg text-secondary flex items-center justify-center hover:bg-slate-100 duration-300"
               onClick={handleClickMainImg}
             >
               <input
@@ -128,13 +128,7 @@ function FreeAddwork() {
                     </button>
                   </div>
                 ) : (
-                  <Image
-                    src="/Camera.svg"
-                    alt="Camera"
-                    className=""
-                    width={80}
-                    height={80}
-                  />
+                  <i className="fa-solid fa-camera text-9xl text-light"></i>
                 )}
               </div>
             </div>
@@ -146,7 +140,7 @@ function FreeAddwork() {
               รูปผลงานเพิ่มเติม (สูงสุดไม่ควรเกิน 5 รูป)
             </h1>
             <div
-              className="cursor-pointer border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center hover:bg-gray-200 duration-300"
+              className="cursor-pointer border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center hover:bg-slate-100 duration-300"
               onClick={handleClickEx}
             >
               <input
@@ -178,13 +172,7 @@ function FreeAddwork() {
                     ))}
                   </div>
                 ) : (
-                  <Image
-                    src="/Camera.svg"
-                    alt="Camera"
-                    className=""
-                    width={80}
-                    height={80}
-                  />
+                  <i className="fa-solid fa-camera text-9xl text-light"></i>
                 )}
               </div>
             </div>
@@ -206,6 +194,7 @@ function FreeAddwork() {
               name="work_catagory"
               required
             >
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
               <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
               <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
               <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
@@ -223,7 +212,7 @@ function FreeAddwork() {
               name="work_deadline"
               required
             >
-              <option value="ไม่มี">ไม่มีกําหนด</option>
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
               <option value="3-5 วัน">3-5 วัน</option>
               <option value="1 อาทิตย์">1 อาทิตย์</option>
               <option value="2 อาทิตย์">2 อาทิตย์</option>

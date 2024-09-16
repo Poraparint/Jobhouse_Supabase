@@ -54,23 +54,17 @@ export default async function AuthButton() {
   const profileImageUrl = profileData?.avatar_url || "/De_Profile.jpeg"; // Default image if none exists
 
   return (
-    <div className="dropdown dropdown-bottom dropdown-end">
-      <div
-        tabIndex={0}
-        className="cursor-pointer relative w-9 h-9 rounded-full"
-      >
+    <details className="dropdown dropdown-bottom dropdown-end">
+      <summary className="relative rounded-full w-8 min-w-8 btn self-center flex">
         <Image
           src={profileImageUrl}
           alt="Profile"
-          className="border rounded-full border-white duration-300"
+          className="border-[0.5px] rounded-full border-white duration-300"
           layout="fill"
           objectFit="cover"
         />
-      </div>
-      <ul
-        tabIndex={0}
-        className="dropdown-content menu shadow bg-base-100 w-72 mt-3 text-secondary rounded-lg rounded-tr-none p-0"
-      >
+      </summary>
+      <ul className="menu dropdown-content shadow bg-base-100 w-72 mt-3 text-secondary rounded-lg rounded-tr-none p-0">
         <li className="hover:bg-gray-100 duration-200 py-2 rounded-t-lg">
           <Link href="/Customer/C_Pro_Edit" className="flex gap-5">
             <div className="relative w-7 h-7 rounded-full">
@@ -112,6 +106,6 @@ export default async function AuthButton() {
           </form>
         </li>
       </ul>
-    </div>
+    </details>
   );
 }

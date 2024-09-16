@@ -9,7 +9,7 @@ export default function EditProfileForm({ user }) {
 
 
   const [profileImage, setProfileImage] = useState(
-    user.avatar_url || "/Camera.svg"
+    user.avatar_url || "/De_Profile.jpeg"
   );
   const [username, setUsername] = useState(user.username || "");
   const [userdetails, setUserDetails] = useState(user.userdetails || "");
