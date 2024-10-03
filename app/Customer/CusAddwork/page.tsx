@@ -21,13 +21,24 @@ function CusAddwork() {
     const result = await addWork(formData);
 
     if (result) {
-      Swal.fire({
+      // ใช้ Swal.mixin() เพื่อสร้างการแจ้งเตือน
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
         icon: "success",
         title: "เพิ่มงานสำเร็จ",
-        showConfirmButton: false,
-        timer: 1000,
       }).then(() => {
-        // Redirect after the alert
+        // Redirect หลังจากแสดง toast
         router.push("/Customer/C_Pro_Edit");
       });
     } else {
@@ -43,7 +54,7 @@ function CusAddwork() {
     <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
-          บอร์ดประกาศงาน
+          ประกาศหาฟรีแลนซ์
         </h1>
         <h1 className="ml-5 text-primary text-xl">ชื่องาน</h1>
         <input
@@ -93,30 +104,38 @@ function CusAddwork() {
               id=""
               required
             >
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
               <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
               <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
               <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
               <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
+              <option value="งานศิลปะ">งานศิลปะ</option>
               <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
               <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
               <option value="บทความ">บทความ</option>
-              <option value="วางแพลนเที่ยว">วางแพลนเที่ยว</option>
+              <option value="การเดินทางและท่องเที่ยว">
+                การเดินทางและท่องเที่ยว
+              </option>
+              <option value="สุขภาพ">สุขภาพ</option>
+              <option value="ดนตรี">คนตรี</option>
+              <option value="อาหารและเครื่องดื่ม">อาหารและเครื่องดื่ม</option>
+              <option value="ธรรมชาติ">ธรรมชาติ</option>
             </select>
           </div>
           <div className="w-full flex flex-col gap-5">
-          <h1 className="ml-5 text-primary text-xl">ส่งงานใน</h1>
-          <select
+            <h1 className="ml-5 text-primary text-xl">ส่งงานใน</h1>
+            <select
               className="border text-lg border-third p-2 rounded-md text-secondary"
               name="work_deadline"
               id=""
               required
             >
-              <option value="ไม่กำหนด">ไม่กำหนด</option>
-            <option value="3-5 วัน">3-5 วัน</option>
-            <option value="1 อาทิตย์">1 อาทิตย์</option>
-            <option value="2 อาทิตย์">2 อาทิตย์</option>
-            <option value="1 เดือน">1 เดือน</option>
-            <option value="2 เดือน">2 เดือน</option>
+              <option value="ไม่มีกำหนด">ไม่มีกำหนด</option>
+              <option value="3-5 วัน">3-5 วัน</option>
+              <option value="1 อาทิตย์">1 อาทิตย์</option>
+              <option value="2 อาทิตย์">2 อาทิตย์</option>
+              <option value="1 เดือน">1 เดือน</option>
+              <option value="2 เดือน">2 เดือน</option>
             </select>
           </div>
         </div>

@@ -6,6 +6,7 @@ export async function updateProfile(formData: FormData) {
     const username = formData.get("username") as string | null;
     const userdetails = formData.get("userdetails") as string | null;
     const avatar = formData.get("profile") as File | null;
+    const bg = formData.get("bg") as File | null;
 
     const supabase = createClient();
 
@@ -20,7 +21,6 @@ export async function updateProfile(formData: FormData) {
       return { message: "User not authenticated", error: userError };
     }
 
-    
     // จัดเตรียมข้อมูลที่จะอัปเดต
     const updates: { [key: string]: string | null } = {};
     if (username) updates.username = username;
@@ -54,6 +54,29 @@ export async function updateProfile(formData: FormData) {
 
       const avatarUrl = publicUrlData.publicUrl;
       updates.avatar_url = avatarUrl;
+    }
+
+    // Upload background image if provided
+    if (bg) {
+      const bgPath = `${user.id}/bg`;
+
+      const { error: bgUploadError } = await supabase.storage
+        .from("User_Profile")
+        .upload(bgPath, bg, { cacheControl: "3600", upsert: true });
+
+      if (bgUploadError) {
+        console.error("Error uploading background:", bgUploadError.message);
+        return {
+          message: "Cannot upload background image",
+          error: bgUploadError,
+        };
+      }
+
+      const { data: bgUrlData } = supabase.storage
+        .from("User_Profile")
+        .getPublicUrl(bgPath);
+
+      updates.bg_url = bgUrlData.publicUrl;
     }
 
     // อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล Supabase

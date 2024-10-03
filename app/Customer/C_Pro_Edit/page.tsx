@@ -6,8 +6,9 @@ import Image from "next/image";
 import { useUser } from "@/hooks/useUser";
 import Link from "next/link";
 import ShowWork from "../Components/ShowWork";
-import EditProfileForm from "./Edit/EditProfileForm"; // เรียกใช้ component ใหม่
+import Footer from "@/components/Footer";
 import Comment from "@/components/Comment";
+import EditProfileForm from "./Edit/EditProfileForm"; // เรียกใช้ component ใหม่
 
 export default function C_Pro_Edit() {
   const supabase = createClient();
@@ -18,6 +19,9 @@ export default function C_Pro_Edit() {
   const [showModal, setShowModal] = useState(false); // State สำหรับเปิดปิด modal
   const [showEdit, setShowEdit] = useState(false); // State สำหรับเปิดปิด modal
 
+  const [showWorks, setShowWorks] = useState(true); // เพิ่ม state สำหรับจัดการการแสดง ShowWork
+  const [showReviews, setShowReviews] = useState(false); // State สำหรับการแสดงผลรีวิว
+
   const useuser = useuserData?.user;
   const isUserLoading = useuserData?.isLoading;
   const userError = useuserData?.error;
@@ -27,7 +31,7 @@ export default function C_Pro_Edit() {
     try {
       const { data: userData, error } = await supabase
         .from("users")
-        .select("username, avatar_url, userdetails")
+        .select("username, avatar_url, userdetails, bg_url")
         .eq("id", useuser.id)
         .limit(1)
         .single(); // ดึงข้อมูลผู้ใช้หนึ่งคน
@@ -45,9 +49,10 @@ export default function C_Pro_Edit() {
   const fetchWorks = async () => {
     try {
       const { data: works, error } = await supabase
-        .from("cuswork")
-        .select("*")
-        .eq("user_id", useuser.id); // ดึงข้อมูลงานที่สัมพันธ์กับ user_id ของผู้ใช้
+        .from("FreelanceWork")
+        .select("work_name, work_mainimg, work_catagory, work_budget")
+        .eq("user_id", useuser.id) // ดึงข้อมูลงานที่สัมพันธ์กับ user_id ของผู้ใช้
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setWorks(works || []); // บันทึกข้อมูลงาน
@@ -80,141 +85,193 @@ export default function C_Pro_Edit() {
   console.log(userData);
 
   return (
-    <div className="Page w-[80%] mb-20">
-      <div className="flex gap-5 text-secondary justify-between">
-        <div className="relative p-9 gap-7 rounded-lg shadow-xl flex flex-col items-center w-[40%] border-[0.5px] border-light bg-slate-50">
-          {/* ปุ่มเปิด modal */}
-          <div
-            onClick={() => setShowEdit(true)}
-            className="p-2 rounded-lg border border-primary absolute top-4 right-4 flex gap-2 items-center bg-white text-primary hover:bg-primary hover:text-white cursor-pointer duration-200"
-          >
-            <i className="fa-solid fa-pen text-sm"></i>
-            <p className="text-sm max-lg:hidden">แก้ไขโปรไฟล์</p>
-            {/* ข้อความจะแสดงเมื่อ hover */}
+    <div className="w-full mt-14">
+      <div className="relative">
+        <div className="bg-white absolute z-10 py-2 px-3 flex flex-col gap-5 text-secondary rounded-lg top-40 left-16 shadow-2xl">
+          <div className="relative py-6 px-16 gap-8 flex flex-col items-center w-full max-lg:px-12">
+            <div
+              onClick={() => setShowEdit(true)}
+              className="p-2 rounded-lg border border-primary absolute top-4 right-4 flex gap-2 items-center bg-white text-primary hover:bg-primary hover:text-white cursor-pointer duration-200"
+            >
+              <i className="fa-solid fa-pen text-sm"></i>
+              <p className="text-sm max-lg:hidden">แก้ไขโปรไฟล์</p>
+            </div>
+            {userData?.avatar_url ? (
+              <div className="relative w-28 h-28 rounded-full max-lg:w-20 max-lg:h-20 max-lg:mt-8 duration-300 mt-12">
+                <Image
+                  className="rounded-full"
+                  src={userData.avatar_url}
+                  alt="Avatar"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            ) : (
+              <div className="relative w-28 h-28 rounded-full max-lg:w-20 max-lg:h-20 max-lg:mt-8 duration-300 mt-12">
+                <Image
+                  className="rounded-full"
+                  src="/De_Profile.jpeg"
+                  alt="Avatar"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            )}
+            {userData?.username ? (
+              <p className="font-medium text-2xl text-secondary max-lg:text-xl">
+                {userData.username}
+              </p>
+            ) : (
+              <p>ไม่มีชื่อ</p>
+            )}
+            <button
+              className="py-2 px-6 shadow-lg rounded-lg bg-white text-primary border-primary border hover:bg-primary hover:text-white hover:border-white duration-300"
+              onClick={() => setShowModal(true)}
+            >
+              เพิ่มงาน
+            </button>
           </div>
-          {userData?.avatar_url ? (
-            <div className="relative w-40 h-40 border rounded-full max-lg:w-20 max-lg:h-20 max-lg:mt-8 duration-300">
-              <Image
-                className="rounded-full"
-                src={userData.avatar_url}
-                alt="Avatar"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          ) : (
-            <div className="relative w-40 h-40 border rounded-full max-lg:w-20 max-lg:h-20 max-lg:mt-8 duration-300">
-              <Image
-                className="rounded-full"
-                src="/De_Profile.jpeg"
-                alt="Avatar"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          )}
-          {userData?.username ? (
-            <p className="font-medium text-2xl text-secondary">
-              {userData.username}
-            </p>
-          ) : (
-            <p>ไม่มีชื่อ</p>
-          )}
-
-          {/* ปุ่มเปิด modal */}
-          <button
-            className="py-3 px-6 shadow-lg rounded-lg bg-white text-primary border-primary border hover:bg-primary hover:text-white hover:border-white duration-300 "
-            onClick={() => setShowModal(true)} // เปิด modal
-          >
-            เพิ่มงาน
-          </button>
-        </div>
-
-        <div className=" p-4 shadow-xl w-[70%] rounded-lg relative border-[0.5px] border-light bg-slate-50">
-          {/* Modal แก้ไขโปรไฟล์ */}
-          {userData?.userdetails ? (
-            <div className="h-full">
-              <textarea
-                className="outline-none text-sm text-third h-full w-full bg-transparent"
-                value={userData.userdetails}
-              ></textarea>
-            </div>
-          ) : (
-            <p>ไม่มีชื่อ</p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex gap-7 mt-5 max-lg:flex-col">
-        <div className="w-[70%] max-lg:w-full mt-5">
-          <div className="text-primary text-2xl font-medium flex flex-col gap-5">
-            <h1 className="ml-5">งานของคุณ</h1>
-            <hr className="border-2 border-primary rounded-full" />
+          <hr className="border-primary rounded-full border-[0.5px]" />
+          <div className="p-3 bg-slate-50 w-full border border-light rounded-lg h-52 mb-5">
+            {userData?.userdetails ? (
+              <div className="h-full">
+                <textarea
+                  className="outline-none text-sm text-third h-full w-full bg-transparent tracking-wider"
+                  value={userData.userdetails}
+                ></textarea>
+              </div>
+            ) : (
+              <p>สามารถใส่ข้อมูลผู้ใช้ได้</p>
+            )}
           </div>
-          {works && works.length > 0 ? (
-            <div className="flex flex-col gap-4 mt-5">
-              {works.map((work) => (
-                <ShowWork key={work.id} work={work} />
-              ))}
+        </div>
+        {userData?.bg_url ? (
+          <div className="w-full h-[17rem] relative">
+            <Image
+              className=""
+              src={ userData.bg_url }
+              alt="BG"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        ) : (
+          <div className="w-full h-[17rem] relative">
+            <Image
+              className=""
+              src="/DefaultBG.jpeg"
+              alt="BG"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        )}
+
+        <div className="w-full flex">
+          <div className="w-full flex justify-end bg-gray-100 drop-shadow-md">
+            <div className="flex justify-evenly text-secondary text-lg py-3 max-lg:w-[60%] w-[80%]">
+              <h1>รายละเอียด</h1>
+
+              <h1
+                className={`cursor-pointer ${
+                  showWorks ? "text-primary" : "text-secondary"
+                }`}
+                onClick={() => {
+                  setShowWorks(true);
+                  setShowReviews(false); // ซ่อนรีวิวเมื่อแสดงผลงาน
+                }}
+              >
+                ผลงาน
+              </h1>
+              <h1
+                className={`cursor-pointer ${
+                  showReviews ? "text-primary" : "text-secondary"
+                }`}
+                onClick={() => {
+                  setShowWorks(false);
+                  setShowReviews(true); // เมื่อกดปุ่มจะแสดงรีวิว
+                }}
+              >
+                รีวิว
+              </h1>
             </div>
-          ) : (
-            <p>คุณยังไม่มีงานที่เพิ่มในระบบ</p>
-          )}
+          </div>
+        </div>
+        <div className="flex justify-end px-10">
+          <div className="w-[70%] max-lg:w-[50%]">
+            {showWorks && (
+              <div>
+                {works && works.length > 0 ? (
+                  <div className="grid grid-cols-3 grid-rows-1 gap-4 max-lg:grid-cols-1 mt-8">
+                    {works.map((work) => (
+                      <ShowWork key={work.id} work={work} />
+                    ))}
+                  </div>
+                ) : (
+                  <p>คุณยังไม่มีงานที่เพิ่มในระบบ</p>
+                )}
+              </div>
+            )}
+            {showReviews && (
+              <div className="mt-8">
+                {/* เรียกใช้ Comment component */}
+                <Comment />
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* <Comment /> */}
-      </div>
-
-      {/* เมื่อ showEdit เป็น true จะแสดงฟอร์ม */}
-      {showEdit && (
-        <div className="modal modal-open ">
-          <div className="modal-box flex flex-col gap-5 p-5 max-w-[60rem]">
-            {/* ส่งข้อมูลผู้ใช้ไปยัง EditProfileForm */}
-            <div className="relative">
-              <EditProfileForm user={userData} />
-              <div className="modal-action absolute bottom-0 right-[120px] mb-3">
-                <button
-                  className="btn border-secondary text-secondary hover:bg-slate-100 duration-100 "
-                  onClick={() => setShowEdit(false)} // ปิด modal เมื่อกดปุ่มยกเลิก
-                >
-                  ยกเลิก
-                </button>
+        <div className="mb-20">
+          {showEdit && (
+            <div className="modal modal-open">
+              <div className="modal-box flex flex-col gap-5 p-5 max-w-[60rem] shadow-lg rounded-lg">
+                <div className="relative">
+                  <EditProfileForm user={userData} />
+                  <div className="modal-action absolute bottom-0 right-[120px] mb-3 mr-6">
+                    <button
+                      className="btn border-secondary text-secondary hover:bg-slate-100 duration-100 "
+                      onClick={() => setShowEdit(false)}
+                    >
+                      ยกเลิก
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      {/* Modal สำหรับเลือกประเภทงาน */}
-      {showModal && (
-        <div className="modal modal-open">
-          <div className="modal-box flex flex-col gap-5 p-5">
-            <h2 className="text-xl font-bold tracking-normal text-secondary mb-6">
-              เลือกประเภทงาน
-            </h2>
-            <div className="flex justify-evenly ">
-              <Link href="/Customer/CusAddwork">
-                <button className="btn btn-primary w-full font-normal text-white tracking-wide">
-                  ประกาศหาฟรีแลนซ์
-                </button>
-              </Link>
-              <Link href="/Customer/FreeAddwork">
-                <button className="btn btn-primary w-full font-normal text-white tracking-wide px-7">
-                  เพิ่มงานของคุณ
-                </button>
-              </Link>
+          {showModal && (
+            <div className="modal modal-open">
+              <div className="modal-box flex flex-col gap-5 p-5 shadow-lg rounded-lg">
+                <h2 className="text-xl font-bold tracking-normal text-secondary mb-6">
+                  เลือกประเภทงาน
+                </h2>
+                <div className="flex justify-evenly">
+                  <Link href="/Customer/CusAddwork">
+                    <button className="btn btn-primary w-full font-normal text-white tracking-wide">
+                      ประกาศหาฟรีแลนซ์
+                    </button>
+                  </Link>
+                  <Link href="/Customer/FreeAddwork">
+                    <button className="btn btn-primary w-full font-normal text-white tracking-wide px-7">
+                      เพิ่มงานของคุณ
+                    </button>
+                  </Link>
+                </div>
+                <div className="modal-action">
+                  <button
+                    className="btn border-secondary text-secondary hover:bg-slate-100 duration-100"
+                    onClick={() => setShowModal(false)}
+                  >
+                    ยกเลิก
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="modal-action">
-              <button
-                className="btn border-secondary text-secondary hover:bg-slate-100 duration-100"
-                onClick={() => setShowModal(false)} // ปิด modal
-              >
-                ยกเลิก
-              </button>
-            </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
+      <Footer />
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function Login({
   
 
   return (
-    <div className="Page bg-white border border-secondary mx-9 rounded-lg shadow-xl">
+    <div className="Page bg-white border border-secondary w-[80%] max-lg:w-[60%] rounded-lg shadow-xl">
       <div className="flex justify-between m-6 gap-7 rounded-lg">
         <div className="w-full flex flex-col text-center">
           <Link
@@ -60,7 +60,7 @@ export default function Login({
           <h1 className="text-4xl font-semibold text-secondary my-8">
             เข้าสู่ระบบ
           </h1>
-          <form className="flex flex-col justify-center gap-4 py-5 mx-2 mt-6 items-center">
+          <form className="flex flex-col justify-center gap-6 py-5 mx-2 mt-6 items-center">
             <label className="input border-secondary flex items-center gap-2 w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -78,8 +78,6 @@ export default function Login({
                 required
               />
               <div className="flex justify-between items-center">
-                <Label htmlFor="password">Password</Label>
-
                 <Link
                   className="text-sm text-blue-600 underline"
                   href="/forgot-password"
@@ -109,12 +107,10 @@ export default function Login({
                 required
               />
             </label>
-            <SubmitButton
-              formAction={signIn}
-              className="bg-primary rounded-md w-[70%] py-3 border border-white text-white "
-              pendingText="Signing In..."
-            >
-              เข้าสู่ระบบ
+            <SubmitButton formAction={signIn} pendingText="Signing In...">
+              <div className="btn btn-primary font-normal text-white px-9">
+                เข้าสู่ระบบ
+              </div>
             </SubmitButton>
             {searchParams?.message && (
               <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">

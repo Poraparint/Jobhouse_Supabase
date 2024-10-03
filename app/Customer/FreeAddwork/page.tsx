@@ -1,17 +1,16 @@
 "use client";
-import { addWork } from "./FAddwork";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
-import { useState, useRef } from "react";
-import Image from "next/image";
+import { addWork } from "./FAddwork";  // นำเข้า function สำหรับการเพิ่มงาน
+import Swal from "sweetalert2";  // นำเข้า SweetAlert2 สำหรับการแจ้งเตือน
+import { useRouter } from "next/navigation";  // นำเข้า router ของ Next.js สำหรับการนำทาง
+import { useState, useRef } from "react";  // นำเข้า React hooks สำหรับจัดการ state และ ref
 
-
+// ฟังก์ชันคอมโพเนนต์ FreeAddwork: สำหรับจัดการฟอร์มการเพิ่มงานหรือโพสต์งาน
 function FreeAddwork() {
   const router = useRouter();
-  const [mainImg, setMainImg] = useState<File | null>(null); // State for main image
+  const [mainImg, setMainImg] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
-  const mainImgInputRef = useRef<HTMLInputElement>(null); // Separate ref for main image input
-  const fileInputRef = useRef<HTMLInputElement>(null); // Ref for work_ex input
+  const mainImgInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleMainImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -39,7 +38,6 @@ function FreeAddwork() {
       formData.set("work_deadline", "-");
     }
 
-    // Append main image to form data if available
     if (mainImg) {
       formData.append("work_mainimg", mainImg);
     }
@@ -54,10 +52,13 @@ function FreeAddwork() {
       Swal.fire({
         icon: "success",
         title: "เพิ่มงานสำเร็จ",
+        toast: true,
+        position: "top-end",
         showConfirmButton: false,
-        timer: 1000,
+        timer: 1500,
+        timerProgressBar: true,
       }).then(() => {
-        router.push(`/Customer/C_Pro_Edit`);
+        router.push("/Customer/C_Pro_Edit");
       });
     } else {
       Swal.fire({
@@ -80,7 +81,7 @@ function FreeAddwork() {
     <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
-          บอร์ดประกาศงาน
+          เพิ่มงานของคุณ
         </h1>
         <h1 className="ml-5 text-primary text-xl">ชื่องาน</h1>
         <input
@@ -199,10 +200,17 @@ function FreeAddwork() {
               <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
               <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
               <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
+              <option value="งานศิลปะ">งานศิลปะ</option>
               <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
               <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
               <option value="บทความ">บทความ</option>
-              <option value="วางแพลนเที่ยว">วางแพลนเที่ยว</option>
+              <option value="การเดินทางและท่องเที่ยว">
+                การเดินทางและท่องเที่ยว
+              </option>
+              <option value="สุขภาพ">สุขภาพ</option>
+              <option value="ดนตรี">คนตรี</option>
+              <option value="อาหารและเครื่องดื่ม">อาหารและเครื่องดื่ม</option>
+              <option value="ธรรมชาติ">ธรรมชาติ</option>
             </select>
           </div>
           <div className="w-full flex flex-col gap-5">

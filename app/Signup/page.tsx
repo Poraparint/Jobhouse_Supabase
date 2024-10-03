@@ -57,7 +57,7 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
   }
 
   return (
-    <div className="Page bg-white border border-secondary mx-9 rounded-lg shadow-xl">
+    <div className="Page bg-white border border-secondary w-[80%] max-lg:w-[60%] rounded-lg shadow-xl">
       <div className="flex justify-between m-6 gap-7 rounded-lg">
         <div className="w-full flex flex-col text-center">
           <Link
@@ -163,10 +163,12 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
 
             <SubmitButton
               formAction={signUp}
-              className="bg-primary rounded-md w-[70%] py-3 border border-white text-white"
+              className=""
               pendingText="Signing Up..."
             >
-              สมัครสมาชิก
+              <div className="btn btn-primary text-white font-normal px-9">
+                สมัครสมาชิก
+              </div>
             </SubmitButton>
             <FormMessage message={searchParams} />
           </form>

@@ -6,14 +6,14 @@ import Swal from "sweetalert2";
 
 
 export default function EditProfileForm({ user }) {
-
-
   const [profileImage, setProfileImage] = useState(
     user.avatar_url || "/De_Profile.jpeg"
   );
+  const [bgImage, setBgImage] = useState(user.bg_url || "/Fuji.jpeg");
   const [username, setUsername] = useState(user.username || "");
   const [userdetails, setUserDetails] = useState(user.userdetails || "");
   const [newImage, setNewImage] = useState<File | null>(null); // State สำหรับเก็บไฟล์รูปใหม่
+  const [newBg, setNewBg] = useState<File | null>(null); // State สำหรับเก็บไฟล์รูปใหม่
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +29,9 @@ export default function EditProfileForm({ user }) {
     formData.append("userdetails", userdetails);
     if (newImage) {
       formData.append("profile", newImage);
+    }
+    if (newBg) {
+      formData.append("bg", newBg); // Append new background image
     }
 
     try {
@@ -51,8 +54,6 @@ export default function EditProfileForm({ user }) {
       setLoading(false);
     }
   };
-
-  
 
   console.log(user);
 
@@ -89,6 +90,34 @@ export default function EditProfileForm({ user }) {
                     setNewImage(file);
                     if (file) {
                       setProfileImage(URL.createObjectURL(file)); // แสดงภาพใหม่
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-5 items-center w-full p-5">
+              <label
+                htmlFor="bgImage"
+                className="block text-lg text-primary font-semibold"
+              >
+                Background Image
+              </label>
+              <div className="relative w-full h-40 hover:opacity-90 duration-150">
+                <Image
+                  src={bgImage}
+                  alt="Background"
+                  layout="fill"
+                  objectFit="cover"
+                />
+                <input
+                  type="file"
+                  name="bgImage"
+                  className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    setNewBg(file);
+                    if (file) {
+                      setBgImage(URL.createObjectURL(file)); // Show new background image preview
                     }
                   }}
                 />
