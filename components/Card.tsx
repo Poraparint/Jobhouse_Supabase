@@ -1,121 +1,168 @@
 "use client";
 
-// นำเข้า createClient จาก utils/supabase/client สำหรับเชื่อมต่อ Supabase
 import { createClient } from "@/utils/supabase/client";
-import { useState, useEffect } from "react"; // ใช้ useState และ useEffect จาก React สำหรับจัดการ state และ lifecycle
-import Image from "next/image"; // ใช้ next/image สำหรับการแสดงรูปภาพที่มีประสิทธิภาพ
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-// กำหนด prop types สำหรับ component Card
 interface CardProps {
-  search: string; // ข้อความค้นหาที่ใช้ในการกรองข้อมูล
-  category: string; // หมวดหมู่ที่เลือกใช้ในการกรองข้อมูล
-  deadline: string; // เวลาที่เลือกใช้ในการกรองข้อมูล
+  search: string;
+  category: string;
+  deadline: string;
 }
 
-// Component Card สำหรับแสดงงานฟรีแลนซ์ในรูปแบบ card
 export default function Card({ search, category, deadline }: CardProps) {
-  // สร้าง state สำหรับเก็บข้อมูลงานที่ดึงมาจาก Supabase
   const [data, setData] = useState<any>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage] = useState<number>(12); // จำนวนงานที่จะแสดงในแต่ละหน้า
 
-  // ฟังก์ชันสำหรับดึงข้อมูลจากฐานข้อมูล Supabase
   const fetch = async () => {
-    const supabase = createClient(); // สร้าง client ของ Supabase
-
-    // Query ข้อมูลจากตาราง FreelanceWork และเชื่อมโยงกับ users (ข้อมูลผู้ใช้)
+    const supabase = createClient();
     let { data: Freework } = await supabase
       .from("FreelanceWork")
-      .select(
-        "work_name, work_mainimg, work_deadline, work_catagory, work_budget, created_at, users (username, avatar_url)"
-      )
-      .order("created_at", { ascending: false }); // เพิ่มการเรียงลำดับตามเวลาที่สร้างโพสต์ใหม่สุด;;
+      .select("*, users (username, avatar_url)")
+      .order("created_at", { ascending: false });
 
-    // เก็บข้อมูลที่ได้ใน state
     setData(Freework);
   };
 
-  // ใช้ useEffect เพื่อดึงข้อมูลจาก Supabase เมื่อ component ถูก mount
   useEffect(() => {
-    fetch(); // เรียกฟังก์ชัน fetch เพื่อดึงข้อมูล
-  }, []); // dependency array ว่างหมายถึงการรันเพียงครั้งเดียวเมื่อ component mount
+    fetch();
+  }, []);
+
+  // การคำนวณจำนวนหน้าทั้งหมด
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  // การจัดการการเปลี่ยนหน้า
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // การเลือกข้อมูลที่จะแสดงตามหน้า
+  const currentData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return data.slice(startIndex, startIndex + itemsPerPage);
+  };
+
+  // การแสดงปุ่ม Pagination
+  const renderPagination = () => {
+    const pageNumbers: number[] = [];
+    const maxVisiblePages = 5; // จำนวนปุ่มที่จะแสดงในแต่ละครั้ง
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 || // แสดงหน้าแรก
+        i === totalPages || // แสดงหน้าสุดท้าย
+        (i >= currentPage - 1 && i <= currentPage + 1) // แสดงหน้าใกล้เคียงกับหน้าปัจจุบัน
+      ) {
+        pageNumbers.push(i);
+      }
+    }
+
+    return (
+      <div className="flex justify-center my-6">
+        {currentPage > 1 && (
+          <button
+            className="mx-1 px-4 py-2 border rounded text-primary"
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            ก่อนหน้า
+          </button>
+        )}
+        {pageNumbers.map((number) => (
+          <button
+            key={number}
+            className={`mx-1 px-4 py-2 border rounded ${
+              currentPage === number
+                ? "bg-primary text-white"
+                : "bg-white text-primary"
+            }`}
+            onClick={() => handlePageChange(number)}
+          >
+            {number}
+          </button>
+        ))}
+        {currentPage < totalPages && (
+          <button
+            className="mx-1 px-4 py-2 border rounded text-primary"
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            ถัดไป
+          </button>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <div className="grid grid-cols-4 grid-rows-1 gap-6 max-lg:grid-cols-1">
-      {/* ตรวจสอบว่ามีข้อมูลใน array หรือไม่ */}
-      {data && data.length > 0 ? (
-        // กรองข้อมูลตามการค้นหา หมวดหมู่ และกำหนดเวลา
-        data
-          .filter((note) => {
-            const matchesSearch =
-              search.toLowerCase() === "" || // ถ้าไม่มีข้อความค้นหาแสดงทั้งหมด
-              (note.users &&
-                note.users.username &&
-                note.users.username
-                  .toLowerCase()
-                  .includes(search.toLowerCase())); // ตรวจสอบว่ามี users และ username ก่อนที่จะค้นหา
+    <div>
+      <div className="grid grid-cols-4 grid-rows-1 gap-6 max-lg:grid-cols-1">
+        {currentData() && currentData().length > 0 ? (
+          currentData()
+            .filter((note) => {
+              const matchesSearch =
+                search.toLowerCase() === "" ||
+                (note.users &&
+                  note.users.username &&
+                  note.users.username
+                    .toLowerCase()
+                    .includes(search.toLowerCase()));
 
-            const matchesDeadline =
-              deadline === "" || note.work_deadline === deadline; // กรองตามเวลาส่งงานที่เลือก
+              const matchesDeadline =
+                deadline === "" || note.work_deadline === deadline;
 
-            const matchesCategory =
-              category === "" || note.work_catagory === category; // กรองตามหมวดหมู่ที่เลือก
+              const matchesCategory =
+                category === "" || note.work_catagory === category;
 
-            // แสดงเฉพาะข้อมูลที่ตรงกับทั้ง search, category และ deadline
-            return matchesSearch && matchesCategory && matchesDeadline;
-          })
-          // แสดงข้อมูลแต่ละชิ้นในรูปแบบ card
-          .map((note, index: number) => (
-            <div key={index} className="card bg-base-100 shadow-xl w-full">
-              <figure>
-                {/* รูปภาพหลักของงาน */}
-                <div className="relative w-full h-52">
-                  <Image
-                    src={note.work_mainimg} // URL ของรูปภาพงาน
-                    alt="Profile"
-                    layout="fill" // ใช้ layout fill เพื่อให้รูปภาพเต็มพื้นที่
-                    objectFit="cover" // ให้รูปภาพเต็มขนาดและครอบคลุม
-                  />
-                </div>
-              </figure>
-              <div className="card-body p-4">
-                {/* ชื่อของงาน */}
-                <h1 className="card-title text-secondary text-lg font-normal">
-                  {note.work_name}
-                </h1>
-                {/* หมวดหมู่ของงาน */}
-                <p className="text-third text-sm font-normal">
-                  {note.work_catagory}
-                </p>
-                <div className="card-actions justify-between mt-5 items-center">
-                  <div className="flex items-center gap-2">
-                    {/* รูปโปรไฟล์ของผู้ใช้ */}
-                    <div className="relative w-7 h-7 rounded-full">
+              return matchesSearch && matchesCategory && matchesDeadline;
+            })
+            .map((note, index: number) => (
+              <Link key={note.id} href={`/FWorkID/${note.id}`}>
+                <div className="card bg-base-100 shadow-md w-full h-full hover:shadow-xl duration-150">
+                  <figure>
+                    <div className="relative w-full h-52">
                       <Image
-                        className="rounded-full"
-                        src={note.users.avatar_url || "/De_Profile.jpeg"} // รูปโปรไฟล์ของผู้ใช้ หรือใช้รูปเริ่มต้นถ้าไม่มี
-                        alt="Avatar"
-                        layout="fill" // ใช้ layout fill เพื่อให้รูปโปรไฟล์เต็มพื้นที่
-                        objectFit="cover" // ให้รูปโปรไฟล์เต็มขนาดและครอบคลุม
+                        src={note.work_mainimg}
+                        alt="Profile"
+                        layout="fill"
+                        objectFit="cover"
                       />
                     </div>
-                    {/* ชื่อผู้ใช้ */}
-                    <div className="text-primary text-sm">
-                      {note.users.username}
+                  </figure>
+                  <div className="card-body p-4">
+                    <h1 className="card-title text-secondary text-base">
+                      {note.work_name}
+                    </h1>
+                    <p className="text-third text-xs">{note.work_catagory}</p>
+                    <div className="card-actions mt-5 flex justify-between">
+                      <div className="text-primary text-xs flex gap-2 items-center">
+                        <div className="relative w-6 h-6 rounded-full">
+                          <Image
+                            src={note.users.avatar_url || "/De_Profile.jpeg"}
+                            alt={note.users.username}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-full"
+                          />
+                        </div>
+                        <p>{note.users.username}</p>
+                      </div>
+                      <div className="text-baht text-base">
+                        {note.work_budget} ฿
+                      </div>
                     </div>
                   </div>
-                  {/* งบประมาณของงาน */}
-                  <div className="text-baht text-xl font-normal">
-                    {note.work_budget} ฿
-                  </div>
                 </div>
-              </div>
-            </div>
-          ))
-      ) : (
-        // ถ้าไม่มีข้อมูล (เช่น ข้อมูลไม่ตรงกับการกรอง) จะแสดงข้อความนี้
-        <div className="text-center p-3 text-lg w-full">
-          ไม่มีการเพิ่มงานเข้ามา
-        </div>
-      )}
+              </Link>
+            ))
+        ) : (
+          <div className="text-center p-3 text-lg w-full">
+            ไม่มีการเพิ่มงานเข้ามา
+          </div>
+        )}
+      </div>
+      {/* เรียกใช้ฟังก์ชันเพื่อแสดงปุ่ม Pagination */}
+      {renderPagination()}
     </div>
   );
 }

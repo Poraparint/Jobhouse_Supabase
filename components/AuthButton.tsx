@@ -16,7 +16,7 @@ export default async function AuthButton() {
     "use server";
     const supabase = createClient();
     await supabase.auth.signOut();
-    return redirect("/login");
+    return redirect("/sign-in");
   };
 
   // If there's no user, display login/signup buttons
@@ -24,13 +24,13 @@ export default async function AuthButton() {
     return (
       <div className="flex gap-3">
         <Link
-          href="/login"
+          href="/sign-in"
           className="py-2 px-5 flex rounded-md border hover:bg-white hover:text-primary duration-300"
         >
           Login
         </Link>
         <Link
-          href="/Signup"
+          href="/sign-up"
           className="py-2 px-5 flex rounded-md border hover:bg-white hover:text-primary duration-300"
         >
           Sign Up

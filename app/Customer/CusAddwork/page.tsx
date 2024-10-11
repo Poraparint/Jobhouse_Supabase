@@ -12,12 +12,6 @@ function CusAddwork() {
 
     const formData = new FormData(e.currentTarget);
 
-    // ตรวจสอบว่า work_deadline มีการเลือกหรือไม่ ถ้าไม่ให้แสดง "-"
-    const deadline = formData.get("work_deadline") as string;
-    if (!deadline) {
-      formData.set("work_deadline", "-");
-    }
-
     const result = await addWork(formData);
 
     if (result) {
@@ -51,7 +45,7 @@ function CusAddwork() {
   };
 
   return (
-    <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10">
+    <div className="Page bg-bg shadow-md rounded-md w-[90%] p-10 mb-9">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
           ประกาศหาฟรีแลนซ์
@@ -64,37 +58,6 @@ function CusAddwork() {
           className="w-full text-secondary border border-third rounded-md p-2 text-lg outline-none"
           required
         />
-        <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
-        <textarea
-          name="work_detail"
-          placeholder="รายละเอียดงานของคุณ "
-          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
-          required
-        ></textarea>
-        <div className="flex justify-between gap-9 max-lg:flex-wrap">
-          <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">
-              ตัวอย่างผลงานที่ต้องการ
-            </h1>
-            <input
-              name="work_ex"
-              type="text"
-              placeholder="ตย."
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
-              required
-            />
-          </div>
-          <div className="w-full flex flex-col gap-5 ">
-            <h1 className="ml-5 text-primary text-xl">งบประมาณ</h1>
-            <input
-              name="work_budget"
-              type="text"
-              placeholder="ระบุจำนวนเงินแลกเปลี่ยน"
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
-              required
-            />
-          </div>
-        </div>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
@@ -124,21 +87,46 @@ function CusAddwork() {
           </div>
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">ส่งงานใน</h1>
-            <select
-              className="border text-lg border-third p-2 rounded-md text-secondary"
+            <input
+              type="date"
               name="work_deadline"
-              id=""
+              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
               required
-            >
-              <option value="ไม่มีกำหนด">ไม่มีกำหนด</option>
-              <option value="3-5 วัน">3-5 วัน</option>
-              <option value="1 อาทิตย์">1 อาทิตย์</option>
-              <option value="2 อาทิตย์">2 อาทิตย์</option>
-              <option value="1 เดือน">1 เดือน</option>
-              <option value="2 เดือน">2 เดือน</option>
-            </select>
+            />
           </div>
         </div>
+        <div className="flex justify-between gap-9 max-lg:flex-wrap">
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">
+              ตัวอย่างผลงานที่ต้องการ
+            </h1>
+            <input
+              name="work_ex"
+              type="text"
+              placeholder="ตย."
+              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+              required
+            />
+          </div>
+          <div className="w-full flex flex-col gap-5 ">
+            <h1 className="ml-5 text-primary text-xl">งบประมาณ</h1>
+            <input
+              name="work_budget"
+              type="text"
+              placeholder="ระบุจำนวนเงินแลกเปลี่ยน"
+              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+              required
+            />
+          </div>
+        </div>
+
+        <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
+        <textarea
+          name="work_detail"
+          placeholder="รายละเอียดงานของคุณ "
+          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
+          required
+        ></textarea>
         <div className="flex justify-end text-xl gap-5 mt-14">
           <button
             type="submit"

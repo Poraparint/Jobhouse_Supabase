@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div className="Page w-full flex flex-col items-center">
-      <div className="w-[90%] border bg-white border-light shadow-2xl p-7 rounded-xl tracking-wider">
+      <div className="w-[90%] border bg-bg border-light shadow-2xl p-7 rounded-xl tracking-wider">
         {/* ใช้คอมโพเนนต์ Search */}
         <Search
           search={search}

@@ -11,10 +11,11 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: "#1F3A93",
         secondary: "#3D3D3D",
-        third: "#919191",
+        third: "#5F5F5F",
         baht: "#238326",
-        fourth: "#4E4E4E",
+        bg: "#FFFFFF",
         light: "#D9D9D9",
+        danger: "#BB2124",
 
         btn: {
           background: "hsl(var(--btn-background))",

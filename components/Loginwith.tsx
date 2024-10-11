@@ -25,7 +25,7 @@ export default function Loginwith() {
   };
 
   return (
-    <div className="flex flex-col items-center text-secondary w-[70%] self-center">
+    <div className="flex flex-col items-center text-secondary w-4/6 self-center my-5">
       <div
         onClick={signInWithGoogle}
         className="py-1 cursor-pointer gap-3 px-2 border border-secondary rounded-md flex items-center justify-evenly hover:bg-[#f0f0f0] duration-300"

@@ -5,6 +5,9 @@ export async function updateProfile(formData: FormData) {
   try {
     const username = formData.get("username") as string | null;
     const userdetails = formData.get("userdetails") as string | null;
+    const fb_url = formData.get("fb_url") as string | null;
+    const ig_url = formData.get("ig_url") as string | null;
+    const line_url = formData.get("line_url") as string | null;
     const avatar = formData.get("profile") as File | null;
     const bg = formData.get("bg") as File | null;
 
@@ -25,6 +28,9 @@ export async function updateProfile(formData: FormData) {
     const updates: { [key: string]: string | null } = {};
     if (username) updates.username = username;
     if (userdetails) updates.userdetails = userdetails;
+    if (fb_url) updates.fb_url = fb_url;
+    if (ig_url) updates.ig_url = ig_url;
+    if (line_url) updates.line_url = line_url;
 
     // อัปโหลดรูปโปรไฟล์ถ้ามีการเลือกไฟล์
     if (avatar) {

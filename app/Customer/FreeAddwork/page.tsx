@@ -43,10 +43,11 @@ function FreeAddwork() {
     }
 
     files.forEach((file, index) => {
-      formData.append(`work_ex_${index}`, file);
+      formData.append(`work_ex_${index}`, file); // ทำการเพิ่มไฟล์
     });
 
-    const newId = await addWork(formData);
+    // อาจจะมีการส่งค่าเป็น array ไปยังฐานข้อมูลในฟังก์ชัน addWork
+    const newId = await addWork(formData); // ตรวจสอบว่า addWork จัดการไฟล์ได้อย่างถูกต้อง
 
     if (newId) {
       Swal.fire({
@@ -78,7 +79,7 @@ function FreeAddwork() {
   };
 
   return (
-    <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
+    <div className="Page bg-bg border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
           เพิ่มงานของคุณ
@@ -91,102 +92,6 @@ function FreeAddwork() {
           className="w-full text-secondary border border-third rounded-md p-2 text-lg outline-none"
           required
         />
-        <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
-        <textarea
-          name="work_detail"
-          placeholder="รายละเอียดงานของคุณ"
-          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
-          required
-        ></textarea>
-        <div className="flex justify-between gap-9 max-lg:flex-wrap">
-          <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
-            <div
-              className="cursor-pointer border border-third h-[15rem] rounded-md p-2 text-lg text-secondary flex items-center justify-center hover:bg-slate-100 duration-300"
-              onClick={handleClickMainImg}
-            >
-              <input
-                type="file"
-                name="work_mainimg"
-                className="hidden"
-                onChange={handleMainImgChange}
-                ref={mainImgInputRef}
-              />
-              <div className="text-center ">
-                {mainImg ? (
-                  <div className="relative">
-                    <img
-                      src={URL.createObjectURL(mainImg)}
-                      alt={mainImg.name}
-                      className="w-32 h-32 object-cover rounded-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setMainImg(null)}
-                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
-                    >
-                      x
-                    </button>
-                  </div>
-                ) : (
-                  <i className="fa-solid fa-camera text-9xl text-light"></i>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-between gap-9 max-lg:flex-wrap">
-          <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">
-              รูปผลงานเพิ่มเติม (สูงสุดไม่ควรเกิน 5 รูป)
-            </h1>
-            <div
-              className="cursor-pointer border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center hover:bg-slate-100 duration-300"
-              onClick={handleClickEx}
-            >
-              <input
-                type="file"
-                name="work_ex"
-                className="hidden"
-                onChange={handleFileChange}
-                multiple
-                ref={fileInputRef}
-              />
-              <div className="text-center">
-                {files.length > 0 ? (
-                  <div className="flex flex-wrap gap-3">
-                    {files.map((file, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={file.name}
-                          className="w-32 h-32 object-cover rounded-md"
-                        />
-                        <button
-                          type="button"
-                          onClick={(e) => handleDelete(index, e)}
-                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
-                        >
-                          x
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <i className="fa-solid fa-camera text-9xl text-light"></i>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <h1 className="ml-5 text-primary text-xl">สิ่งที่ลูกค้าจะได้รับ</h1>
-          <textarea
-            name="work_Exdetail"
-            placeholder="รายละเอียดสิ่งที่ลูกค้าจะได้รับ"
-            className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary mt-4"
-          ></textarea>
-        </div>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
@@ -238,6 +143,102 @@ function FreeAddwork() {
               required
             />
           </div>
+        </div>
+        <h1 className="ml-5 text-primary text-xl">ขั้นตอนการทำงาน</h1>
+        <textarea
+          name="work_detail"
+          placeholder="ขั้นตอนการทำงานของคุณ"
+          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
+          required
+        ></textarea>
+        <div className="flex justify-between gap-9 max-lg:flex-wrap">
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
+            <div
+              className="cursor-pointer border text-third border-third h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
+              onClick={handleClickMainImg}
+            >
+              <input
+                type="file"
+                name="work_mainimg"
+                className="hidden"
+                onChange={handleMainImgChange}
+                ref={mainImgInputRef}
+              />
+              <div className="text-center ">
+                {mainImg ? (
+                  <div className="relative">
+                    <img
+                      src={URL.createObjectURL(mainImg)}
+                      alt={mainImg.name}
+                      className="w-32 h-32 object-cover rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setMainImg(null)}
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                    >
+                      x
+                    </button>
+                  </div>
+                ) : (
+                  <i className="fa-solid fa-camera text-9xl"></i>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between gap-9 max-lg:flex-wrap">
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">
+              รูปผลงานเพิ่มเติม (สูงสุดไม่ควรเกิน 5 รูป)
+            </h1>
+            <div
+              className="cursor-pointer border text-third border-third h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
+              onClick={handleClickEx}
+            >
+              <input
+                type="file"
+                name="work_ex"
+                className="hidden"
+                onChange={handleFileChange}
+                multiple
+                ref={fileInputRef}
+              />
+              <div className="text-center">
+                {files.length > 0 ? (
+                  <div className="flex flex-wrap gap-3">
+                    {files.map((file, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          className="w-32 h-32 object-cover rounded-md"
+                        />
+                        <button
+                          type="button"
+                          onClick={(e) => handleDelete(index, e)}
+                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                        >
+                          x
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <i className="fa-solid fa-camera text-9xl"></i>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h1 className="ml-5 text-primary text-xl">สิ่งที่ลูกค้าจะได้รับ</h1>
+          <textarea
+            name="work_Exdetail"
+            placeholder="รายละเอียดสิ่งที่ลูกค้าจะได้รับ"
+            className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary mt-4"
+          ></textarea>
         </div>
 
         <div className="flex justify-end text-xl gap-5 mt-14">
