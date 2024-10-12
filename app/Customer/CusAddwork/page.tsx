@@ -12,22 +12,27 @@ function CusAddwork() {
 
     const formData = new FormData(e.currentTarget);
 
-    // ตรวจสอบว่า work_deadline มีการเลือกหรือไม่ ถ้าไม่ให้แสดง "-"
-    const deadline = formData.get("work_deadline") as string;
-    if (!deadline) {
-      formData.set("work_deadline", "-");
-    }
-
     const result = await addWork(formData);
 
     if (result) {
-      Swal.fire({
+      // ใช้ Swal.mixin() เพื่อสร้างการแจ้งเตือน
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
         icon: "success",
         title: "เพิ่มงานสำเร็จ",
-        showConfirmButton: false,
-        timer: 1000,
       }).then(() => {
-        // Redirect after the alert
+        // Redirect หลังจากแสดง toast
         router.push("/Customer/C_Pro_Edit");
       });
     } else {
@@ -40,10 +45,10 @@ function CusAddwork() {
   };
 
   return (
-    <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10">
+    <div className="Page bg-bg shadow-md rounded-md w-[90%] p-10 mb-9">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
-          บอร์ดประกาศงาน
+          ประกาศหาฟรีแลนซ์
         </h1>
         <h1 className="ml-5 text-primary text-xl">ชื่องาน</h1>
         <input
@@ -53,13 +58,43 @@ function CusAddwork() {
           className="w-full text-secondary border border-third rounded-md p-2 text-lg outline-none"
           required
         />
-        <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
-        <textarea
-          name="work_detail"
-          placeholder="รายละเอียดงานของคุณ "
-          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
-          required
-        ></textarea>
+        <div className="flex justify-between gap-9 max-lg:flex-wrap">
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
+            <select
+              className="border text-lg border-third p-2 rounded-md text-secondary"
+              name="work_catagory"
+              id=""
+              required
+            >
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
+              <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
+              <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
+              <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
+              <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
+              <option value="งานศิลปะ">งานศิลปะ</option>
+              <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
+              <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
+              <option value="บทความ">บทความ</option>
+              <option value="การเดินทางและท่องเที่ยว">
+                การเดินทางและท่องเที่ยว
+              </option>
+              <option value="สุขภาพ">สุขภาพ</option>
+              <option value="ดนตรี">คนตรี</option>
+              <option value="อาหารและเครื่องดื่ม">อาหารและเครื่องดื่ม</option>
+              <option value="ธรรมชาติ">ธรรมชาติ</option>
+            </select>
+          </div>
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">ส่งงานใน</h1>
+            <input
+              type="date"
+              name="work_deadline"
+              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+              required
+            />
+          </div>
+        </div>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">
@@ -84,38 +119,14 @@ function CusAddwork() {
             />
           </div>
         </div>
-        <div className="flex justify-between gap-9 max-lg:flex-wrap">
-          <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
-            <select
-              className="border text-lg border-third p-2 rounded-md text-secondary"
-              name="work_catagory"
-              id=""
-              required
-            >
-              <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
-              <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
-              <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
-              <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
-              <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
-              <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
-              <option value="บทความ">บทความ</option>
-              <option value="วางแพลนเที่ยว">วางแพลนเที่ยว</option>
-            </select>
-          </div>
-          <div className="w-full flex flex-col gap-5">
-            <div className="flex gap-3 items-center">
-              <h1 className="ml-5 text-primary text-xl">กำหนดส่งงาน</h1>
-              <h1 className="text-third">*ถ้าไม่มีไม่ต้องใส่</h1>
-            </div>
 
-            <input
-              name="work_deadline"
-              type="date"
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
-            />
-          </div>
-        </div>
+        <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
+        <textarea
+          name="work_detail"
+          placeholder="รายละเอียดงานของคุณ "
+          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
+          required
+        ></textarea>
         <div className="flex justify-end text-xl gap-5 mt-14">
           <button
             type="submit"

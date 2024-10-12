@@ -1,8 +1,14 @@
-// FAddwork.ts
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
+// ฟังก์ชันช่วยสำหรับการจัดการข้อผิดพลาด
+const handleError = (error: any, message: string) => {
+  console.error(message, error);
+  return null;
+};
+
+// ฟังก์ชัน addWork: สำหรับเพิ่มงานใหม่ในฐานข้อมูล
 export const addWork = async (formData: FormData) => {
   const work_name = formData.get("work_name") as string;
   const work_detail = formData.get("work_detail") as string;
@@ -12,14 +18,13 @@ export const addWork = async (formData: FormData) => {
   const work_Exdetail = formData.get("work_Exdetail") as string;
   const supabase = createClient();
 
+  // รับข้อมูลผู้ใช้
   const {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
-
   if (userError || !user) {
-    console.error("Error getting user:", userError);
-    return null;
+    return handleError(userError, "Error getting user");
   }
 
   const postFolder = uuidv4();
@@ -30,27 +35,25 @@ export const addWork = async (formData: FormData) => {
   const mainImgFile = formData.get("work_mainimg") as File;
   let mainImgUrl = "";
 
+  const uploadPromises = [];
+
   if (mainImgFile) {
     const mainImgFileName = `${uuidv4()}${mainImgFile.name.substring(
       mainImgFile.name.lastIndexOf(".")
     )}`;
     const mainImgFilePath = `${userFolder}/${postFolder}/${mainImgFileName}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("work_mainimg")
-      .upload(mainImgFilePath, mainImgFile);
-
-    if (uploadError) {
-      console.error("Main image upload error:", uploadError);
-      return null;
-    }
-
-    // Get public URL for the main image
-    const { data: publicUrlData } = supabase.storage
-      .from("work_mainimg")
-      .getPublicUrl(mainImgFilePath);
-
-    mainImgUrl = publicUrlData.publicUrl; // Save the public URL
+    uploadPromises.push(
+      supabase.storage
+        .from("work_mainimg")
+        .upload(mainImgFilePath, mainImgFile)
+        .then(() => {
+          const { data: publicUrlData } = supabase.storage
+            .from("work_mainimg")
+            .getPublicUrl(mainImgFilePath);
+          mainImgUrl = publicUrlData.publicUrl;
+        })
+    );
   }
 
   // Handle example files
@@ -58,28 +61,30 @@ export const addWork = async (formData: FormData) => {
     key.startsWith("work_ex_")
   );
 
-  for (const key of fileKeys) {
+  fileKeys.forEach((key) => {
     const file = formData.get(key) as File;
     const uniqueFileName = `${uuidv4()}${file.name.substring(
       file.name.lastIndexOf(".")
     )}`;
     const filePath = `${userFolder}/${postFolder}/${uniqueFileName}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("work_ex")
-      .upload(filePath, file);
+    uploadPromises.push(
+      supabase.storage
+        .from("work_ex")
+        .upload(filePath, file)
+        .then(() => {
+          const { data: publicUrlData } = supabase.storage
+            .from("work_ex")
+            .getPublicUrl(filePath);
+          fileUrls.push(publicUrlData.publicUrl);
+        })
+    );
+  });
 
-    if (uploadError) {
-      console.error("Upload error:", uploadError);
-      return null;
-    }
-
-    // Get public URL for the example files
-    const { data: publicUrlData } = supabase.storage
-      .from("work_ex")
-      .getPublicUrl(filePath);
-
-    fileUrls.push(publicUrlData.publicUrl); // Save the public URL
+  try {
+    await Promise.all(uploadPromises);
+  } catch (uploadError) {
+    return handleError(uploadError, "Upload error");
   }
 
   // Insert work into database
@@ -90,7 +95,7 @@ export const addWork = async (formData: FormData) => {
         work_name,
         work_detail,
         work_ex: fileUrls,
-        work_mainimg: mainImgUrl, // Store the main image public URL
+        work_mainimg: mainImgUrl,
         work_Exdetail,
         work_budget,
         work_catagory,
@@ -102,9 +107,8 @@ export const addWork = async (formData: FormData) => {
     .single();
 
   if (error) {
-    console.error("Error inserting work:", error);
-    return null;
+    return handleError(error, "Error inserting work");
   }
 
   return data.id;
-};  
+};

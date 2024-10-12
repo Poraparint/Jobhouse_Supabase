@@ -1,17 +1,16 @@
 "use client";
-import { addWork } from "./FAddwork";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
-import { useState, useRef } from "react";
-import Image from "next/image";
+import { addWork } from "./FAddwork";  // นำเข้า function สำหรับการเพิ่มงาน
+import Swal from "sweetalert2";  // นำเข้า SweetAlert2 สำหรับการแจ้งเตือน
+import { useRouter } from "next/navigation";  // นำเข้า router ของ Next.js สำหรับการนำทาง
+import { useState, useRef } from "react";  // นำเข้า React hooks สำหรับจัดการ state และ ref
 
-
+// ฟังก์ชันคอมโพเนนต์ FreeAddwork: สำหรับจัดการฟอร์มการเพิ่มงานหรือโพสต์งาน
 function FreeAddwork() {
   const router = useRouter();
-  const [mainImg, setMainImg] = useState<File | null>(null); // State for main image
+  const [mainImg, setMainImg] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
-  const mainImgInputRef = useRef<HTMLInputElement>(null); // Separate ref for main image input
-  const fileInputRef = useRef<HTMLInputElement>(null); // Ref for work_ex input
+  const mainImgInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleMainImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -39,25 +38,28 @@ function FreeAddwork() {
       formData.set("work_deadline", "-");
     }
 
-    // Append main image to form data if available
     if (mainImg) {
       formData.append("work_mainimg", mainImg);
     }
 
     files.forEach((file, index) => {
-      formData.append(`work_ex_${index}`, file);
+      formData.append(`work_ex_${index}`, file); // ทำการเพิ่มไฟล์
     });
 
-    const newId = await addWork(formData);
+    // อาจจะมีการส่งค่าเป็น array ไปยังฐานข้อมูลในฟังก์ชัน addWork
+    const newId = await addWork(formData); // ตรวจสอบว่า addWork จัดการไฟล์ได้อย่างถูกต้อง
 
     if (newId) {
       Swal.fire({
         icon: "success",
         title: "เพิ่มงานสำเร็จ",
+        toast: true,
+        position: "top-end",
         showConfirmButton: false,
-        timer: 1000,
+        timer: 1500,
+        timerProgressBar: true,
       }).then(() => {
-        router.push(`/Customer/C_Pro_Edit`);
+        router.push("/Customer/C_Pro_Edit");
       });
     } else {
       Swal.fire({
@@ -77,10 +79,10 @@ function FreeAddwork() {
   };
 
   return (
-    <div className="Page bg-white border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
+    <div className="Page bg-bg border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
-          บอร์ดประกาศงาน
+          เพิ่มงานของคุณ
         </h1>
         <h1 className="ml-5 text-primary text-xl">ชื่องาน</h1>
         <input
@@ -90,10 +92,62 @@ function FreeAddwork() {
           className="w-full text-secondary border border-third rounded-md p-2 text-lg outline-none"
           required
         />
-        <h1 className="ml-5 text-primary text-xl">รายละเอียด</h1>
+        <div className="flex justify-between gap-9 max-lg:flex-wrap">
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
+            <select
+              className="border text-lg border-third p-2 rounded-md text-secondary"
+              name="work_catagory"
+              required
+            >
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
+              <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
+              <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
+              <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
+              <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
+              <option value="งานศิลปะ">งานศิลปะ</option>
+              <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
+              <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
+              <option value="บทความ">บทความ</option>
+              <option value="การเดินทางและท่องเที่ยว">
+                การเดินทางและท่องเที่ยว
+              </option>
+              <option value="สุขภาพ">สุขภาพ</option>
+              <option value="ดนตรี">คนตรี</option>
+              <option value="อาหารและเครื่องดื่ม">อาหารและเครื่องดื่ม</option>
+              <option value="ธรรมชาติ">ธรรมชาติ</option>
+            </select>
+          </div>
+          <div className="w-full flex flex-col gap-5">
+            <h1 className="ml-5 text-primary text-xl">กําหนดเวลาการทำงาน</h1>
+            <select
+              className="border text-lg border-third bg-primary p-2 rounded-md text-white"
+              name="work_deadline"
+              required
+            >
+              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
+              <option value="3-5 วัน">3-5 วัน</option>
+              <option value="1 อาทิตย์">1 อาทิตย์</option>
+              <option value="2 อาทิตย์">2 อาทิตย์</option>
+              <option value="1 เดือน">1 เดือน</option>
+              <option value="3 เดือน">3 เดือน</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-5 w-full">
+            <h1 className="ml-5 text-primary text-xl">ราคา</h1>
+            <input
+              type="text"
+              name="work_budget"
+              placeholder="ราคา (฿)"
+              className="text-lg text-baht border border-third rounded-md p-2 outline-none "
+              required
+            />
+          </div>
+        </div>
+        <h1 className="ml-5 text-primary text-xl">ขั้นตอนการทำงาน</h1>
         <textarea
           name="work_detail"
-          placeholder="รายละเอียดงานของคุณ"
+          placeholder="ขั้นตอนการทำงานของคุณ"
           className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
           required
         ></textarea>
@@ -101,7 +155,7 @@ function FreeAddwork() {
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
             <div
-              className="cursor-pointer border border-third h-[15rem] rounded-md p-2 text-lg text-secondary flex items-center justify-center hover:bg-slate-100 duration-300"
+              className="cursor-pointer border text-third border-third h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
               onClick={handleClickMainImg}
             >
               <input
@@ -128,7 +182,7 @@ function FreeAddwork() {
                     </button>
                   </div>
                 ) : (
-                  <i className="fa-solid fa-camera text-9xl text-light"></i>
+                  <i className="fa-solid fa-camera text-9xl"></i>
                 )}
               </div>
             </div>
@@ -140,7 +194,7 @@ function FreeAddwork() {
               รูปผลงานเพิ่มเติม (สูงสุดไม่ควรเกิน 5 รูป)
             </h1>
             <div
-              className="cursor-pointer border border-third rounded-md p-2 text-lg text-secondary h-[20rem] flex items-center justify-center hover:bg-slate-100 duration-300"
+              className="cursor-pointer border text-third border-third h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
               onClick={handleClickEx}
             >
               <input
@@ -172,7 +226,7 @@ function FreeAddwork() {
                     ))}
                   </div>
                 ) : (
-                  <i className="fa-solid fa-camera text-9xl text-light"></i>
+                  <i className="fa-solid fa-camera text-9xl"></i>
                 )}
               </div>
             </div>
@@ -185,51 +239,6 @@ function FreeAddwork() {
             placeholder="รายละเอียดสิ่งที่ลูกค้าจะได้รับ"
             className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary mt-4"
           ></textarea>
-        </div>
-        <div className="flex justify-between gap-9 max-lg:flex-wrap">
-          <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
-            <select
-              className="border text-lg border-third p-2 rounded-md text-secondary"
-              name="work_catagory"
-              required
-            >
-              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
-              <option value="ออกแบบกราฟฟิก">ออกแบบกราฟฟิก</option>
-              <option value="สถาปัตย์และวิศวกรรม">สถาปัตย์และวิศวกรรม</option>
-              <option value="เว็บไซต์และเทคโนโลยี">เว็บไซต์และเทคโนโลยี</option>
-              <option value="การตลาดและโฆษณา">การตลาดและโฆษณา</option>
-              <option value="ภาพและรูปถ่าย">ภาพและรูปถ่าย</option>
-              <option value="คอร์สการเรียนรู้">คอร์สการเรียนรู้</option>
-              <option value="บทความ">บทความ</option>
-              <option value="วางแพลนเที่ยว">วางแพลนเที่ยว</option>
-            </select>
-          </div>
-          <div className="w-full flex flex-col gap-5">
-            <h1 className="ml-5 text-primary text-xl">กําหนดเวลาการทำงาน</h1>
-            <select
-              className="border text-lg border-third bg-primary p-2 rounded-md text-white"
-              name="work_deadline"
-              required
-            >
-              <option value="ไม่มีกำหนด">ไม่มีกําหนด</option>
-              <option value="3-5 วัน">3-5 วัน</option>
-              <option value="1 อาทิตย์">1 อาทิตย์</option>
-              <option value="2 อาทิตย์">2 อาทิตย์</option>
-              <option value="1 เดือน">1 เดือน</option>
-              <option value="3 เดือน">3 เดือน</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-5 w-full">
-            <h1 className="ml-5 text-primary text-xl">ราคา</h1>
-            <input
-              type="text"
-              name="work_budget"
-              placeholder="ราคา (฿)"
-              className="text-lg text-baht border border-third rounded-md p-2 outline-none "
-              required
-            />
-          </div>
         </div>
 
         <div className="flex justify-end text-xl gap-5 mt-14">
