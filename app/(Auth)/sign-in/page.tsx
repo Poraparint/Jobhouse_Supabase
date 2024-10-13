@@ -14,11 +14,11 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `http://localhost:3000/auth/callback`,
+        redirectTo: `http://jobhouse-supabase-c08zz24t9-poraparints-projects.vercel.app/auth/callback`,
         queryParams: {
           access_type: "offline",
-          prompt: "consent"
-        }
+          prompt: "consent",
+        },
       },
     });
 
