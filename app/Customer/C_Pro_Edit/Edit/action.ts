@@ -53,11 +53,6 @@ export async function updateProfile(formData: FormData) {
         .from("User_Profile")
         .getPublicUrl(filePath);
 
-      if (publicUrlData.error) {
-        console.error("Error getting public URL:", publicUrlData.error.message);
-        return { message: "Cannot get avatar URL", error: publicUrlData.error };
-      }
-
       const avatarUrl = publicUrlData.publicUrl;
       updates.avatar_url = avatarUrl;
     }

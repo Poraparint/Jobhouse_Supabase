@@ -4,8 +4,17 @@ import { updateProfile } from "./action";
 import Image from "next/image";
 import Swal from "sweetalert2";
 
+interface User {
+  avatar_url?: string;
+  bg_url?: string;
+  username?: string;
+  userdetails?: string;
+  fb_url?: string;
+  ig_url?: string;
+  line_url?: string;
+}
 
-export default function EditProfileForm({ user }) {
+export default function EditProfileForm({ user }: { user: User }) {
   const [profileImage, setProfileImage] = useState(
     user.avatar_url || "/De_Profile.jpeg"
   );
@@ -55,7 +64,7 @@ export default function EditProfileForm({ user }) {
         });
       }
     } catch (err) {
-      setError("Error updating profile: " + err.message);
+      setError("Error updating profile: " + (err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -129,7 +138,7 @@ export default function EditProfileForm({ user }) {
             name="userdetails"
             value={userdetails}
             onChange={(e) => setUserDetails(e.target.value)}
-            placeholder={user.user_details || "รายละเอียด"} // แสดง placeholder เป็นค่าปัจจุบัน
+            placeholder={user.userdetails || "รายละเอียด"} // แสดง placeholder เป็นค่าปัจจุบัน
             className="w-full bg-white border-secondary border-[0.5px] py-3 rounded-md px-4 outline-none h-80 text-primary"
           />
         </div>

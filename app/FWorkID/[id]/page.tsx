@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"; // นำเข้า useRouter
 
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 import Swal from "sweetalert2";
 import ProfileButton from "@/components/ProfileButtonProps";
 
