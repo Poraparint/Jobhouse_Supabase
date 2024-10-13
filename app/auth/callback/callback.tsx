@@ -19,7 +19,7 @@ const AuthCallback = () => {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
-            redirectTo: `http://localhost:3000/auth/callback`,
+            redirectTo: `http://jobhouse-supabase-p1awpyldv-poraparints-projects.vercel.app/auth/callback`,
             queryParams: {
               code: code, // Send the code back to Supabase
             },
