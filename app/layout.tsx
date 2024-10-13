@@ -8,7 +8,6 @@ const defaultUrl = process.env.VERCEL_URL
   : "http://localhost:3000";
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
   title: "Jobhouse",
   description: "No bro.",
   icons: [{ url: "/favicon/favicon.ico", href: "/favicon/favicon.ico" }],
