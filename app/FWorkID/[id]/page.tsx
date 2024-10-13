@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation"; // นำเข้า useRouter
 
@@ -15,6 +15,8 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // State สำหรับ modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const supabase = createClient();
   const router = useRouter(); // สร้าง router
 
@@ -67,6 +69,17 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
       setCurrentImageIndex(currentImageIndex - 1);
     }
   };
+
+  const openModal = (img: string) => {
+    setSelectedImage(img);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage("");
+  };
+
 
   // ตรวจสอบว่าเป็นเจ้าของงานหรือไม่
   const isOwner = work?.users?.id === userId;
@@ -145,9 +158,9 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
                 </button>
               </div>
             </div>
-            <div className="w-4/6 max-lg:w-full flex flex-col gap-4 tracking-wider">
+            <div className="w-5/6 max-lg:w-full flex flex-col gap-4 tracking-wider">
               <div className="w-full flex flex-col gap-4 bg-bg p-5 shadow-md rounded-md">
-                <div className="relative w-full h-96 rounded-md">
+                <div className="relative w-full h-[27rem] rounded-md max-lg:h-80">
                   <Image
                     src={work.work_mainimg}
                     alt={work.work_name}
@@ -156,7 +169,8 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
                     className="rounded-md"
                   />
                 </div>
-                {/* แสดงรูปภาพเพิ่มเติม */}
+
+                {/* Additional Images */}
                 {Array.isArray(work.work_ex) && work.work_ex.length > 0 && (
                   <div>
                     <div className="relative flex w-full gap-7 transition-transform duration-500 ease-in-out">
@@ -165,7 +179,8 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
                         .map((img: string, index: number) => (
                           <div
                             key={index}
-                            className="relative w-64 h-44 max-lg:w-44 max-lg:h-32"
+                            className="relative w-64 h-44 max-md:h-32 cursor-pointer"
+                            onClick={() => openModal(img)} // Open modal on image click
                           >
                             <Image
                               src={img}
@@ -176,7 +191,7 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
                             />
                           </div>
                         ))}
-                      {/* ปุ่มเลื่อนซ้ายขวา */}
+                      {/* Navigation Buttons */}
                       <button
                         className="absolute left-2 top-1/2 transform -translate-y-1/2 h-full bg-gray-800 bg-opacity-50 text-white p-2 rounded-full opacity-75 hover:opacity-100 transition-opacity duration-300"
                         onClick={prevImage}
@@ -192,6 +207,29 @@ export default function WorkDetail({ params }: { params: { id: string } }) {
                       >
                         &gt;
                       </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Modal for displaying the selected image */}
+                {isModalOpen && (
+                  <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="relative w-4/6 rounded-lg bg-bg h-[45rem] max-lg:w-5/6 max-lg:h-[40rem]">
+                      <button
+                        className="absolute text-bg text-4xl z-[1] top-2 right-6 hover:text-primary duration-300"
+                        onClick={closeModal}
+                      >
+                        &times;
+                      </button>
+                      <div className="relative w-full h-full z-[0]">
+                        <Image
+                          src={selectedImage}
+                          alt="Profile"
+                          className="rounded-md"
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}

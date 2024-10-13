@@ -61,7 +61,7 @@ export default function Search({
           <option value="1 อาทิตย์">1 อาทิตย์</option>
           <option value="2 อาทิตย์">2 อาทิตย์</option>
           <option value="1 เดือน">1 เดือน</option>
-          <option value="2 เดือน">2 เดือน</option>
+          <option value="3 เดือน">3 เดือน</option>
         </select>
       </div>
 
