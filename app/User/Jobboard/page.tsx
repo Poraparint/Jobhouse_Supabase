@@ -73,8 +73,12 @@ function Jobboard() {
   }, [page, category, userId]); // ลบ search, deadline ออกจาก dependencies
 
   const formatDate = (dateString: string) => {
-    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("th", options);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("th-TH", options);
   };
 
   return (

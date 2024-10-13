@@ -10,7 +10,7 @@ export const useUser = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // สถานะข้อผิดพลาด (error) เพื่อจัดเก็บข้อมูลข้อผิดพลาดถ้ามีปัญหาในการดึงข้อมูล
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null); // Type the error state
 
   // สร้าง client ของ Supabase เพื่อใช้ในการทำงานกับ API ของ Supabase
   const supabase = createClient();
@@ -33,8 +33,8 @@ export const useUser = () => {
         // ถ้าดึงข้อมูลสำเร็จ จะบันทึกข้อมูลผู้ใช้ลงใน state
         setUser(data.user);
       } catch (err) {
-        // ถ้ามีข้อผิดพลาด จะบันทึก error ลงใน state
-        setError(err);
+        // ถ้ามีข้อผิดพลาด จะบันทึก error ลงใน state (cast err to Error)
+        setError(err as Error);
       } finally {
         // ไม่ว่าจะสำเร็จหรือเกิดข้อผิดพลาด ให้เปลี่ยนสถานะ isLoading เป็น false
         setIsLoading(false);

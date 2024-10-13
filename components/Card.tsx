@@ -11,6 +11,18 @@ interface CardProps {
   deadline: string;
 }
 
+interface Note {
+  id: string; // Assuming it's a string
+  work_name: string;
+  work_catagory: string;
+  work_mainimg: string;
+  work_budget: number;
+  work_deadline?: string;
+  users: {
+    username: string;
+  };
+}
+
 export default function Card({ search, category, deadline }: CardProps) {
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -99,7 +111,7 @@ export default function Card({ search, category, deadline }: CardProps) {
       <div className="grid grid-cols-4 grid-rows-1 gap-6 max-lg:grid-cols-1">
         {currentData() && currentData().length > 0 ? (
           currentData()
-            .filter((note) => {
+            .filter((note: Note) => {
               const matchesSearch =
                 search.toLowerCase() === "" ||
                 (note.users &&
@@ -116,7 +128,7 @@ export default function Card({ search, category, deadline }: CardProps) {
 
               return matchesSearch && matchesCategory && matchesDeadline;
             })
-            .map((note, index: number) => (
+            .map((note: Note, index: number) => (
               <Link key={note.id} href={`/FWorkID/${note.id}`}>
                 <div className="card bg-base-100 shadow-md w-full h-full hover:shadow-xl duration-150">
                   <figure>

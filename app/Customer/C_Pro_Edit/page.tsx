@@ -75,7 +75,7 @@ export default function C_Pro_Edit() {
 
   // ถ้ามี error ในการดึงข้อมูล user
   if (userError) {
-    return <div>Error fetching user: {userError.message}</div>;
+    return <div>Error fetching user: gay</div>;
   }
 
   if (!useuser) {

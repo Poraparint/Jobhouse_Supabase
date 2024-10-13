@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
-import { useUser } from "@/hooks/useUser";
 import ShowWork from "./ShowWork";
 import Footer from "./Footer";
 
-export default function UserView({ username }) {
+interface UserViewProps {
+  username: string; // Explicitly define the type of username
+}
+
+export default function UserView({ username }: UserViewProps) {
   const supabase = createClient();
 
   const [userData, setUserData] = useState<any>(null);
@@ -35,7 +38,7 @@ export default function UserView({ username }) {
   };
 
   // ฟังก์ชันสำหรับดึงงานของผู้ใช้
-  const fetchUserWorks = async (userId) => {
+  const fetchUserWorks = async (userId: string) => {
     try {
       // ใช้ userId ที่ได้จาก fetchUserData เพื่อดึงงานของผู้ใช้ที่เลือก
       const { data: works, error } = await supabase
