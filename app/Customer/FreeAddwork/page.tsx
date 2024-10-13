@@ -79,7 +79,7 @@ function FreeAddwork() {
   };
 
   return (
-    <div className="Page bg-bg border border-secondary shadow-xl rounded-md w-[90%] p-10 mb-10">
+    <div className="Page bg-bg shadow-xl rounded-md w-[90%] p-10 mb-10">
       <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         <h1 className="text-primary font-semibold text-3xl mb-9">
           เพิ่มงานของคุณ
@@ -89,14 +89,14 @@ function FreeAddwork() {
           name="work_name"
           type="text"
           placeholder="ชื่องานของคุณ"
-          className="w-full text-secondary border border-third rounded-md p-2 text-lg outline-none"
+          className="w-full text-secondary border border-light rounded-md p-2 text-lg outline-none"
           required
         />
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
             <select
-              className="border text-lg border-third p-2 rounded-md text-secondary"
+              className="border text-lg border-light p-2 rounded-md text-secondary"
               name="work_catagory"
               required
             >
@@ -121,7 +121,7 @@ function FreeAddwork() {
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">กําหนดเวลาการทำงาน</h1>
             <select
-              className="border text-lg border-third bg-primary p-2 rounded-md text-white"
+              className="border text-lg border-light bg-primary p-2 rounded-md text-white"
               name="work_deadline"
               required
             >
@@ -139,7 +139,7 @@ function FreeAddwork() {
               type="text"
               name="work_budget"
               placeholder="ราคา (฿)"
-              className="text-lg text-baht border border-third rounded-md p-2 outline-none "
+              className="text-lg text-baht border border-light rounded-md p-2 outline-none "
               required
             />
           </div>
@@ -148,14 +148,14 @@ function FreeAddwork() {
         <textarea
           name="work_detail"
           placeholder="ขั้นตอนการทำงานของคุณ"
-          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
+          className="h-[10rem] w-full outline-none border border-light rounded-md p-3 text-lg text-secondary"
           required
         ></textarea>
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">รูปผลงานหลัก</h1>
             <div
-              className="cursor-pointer border text-third border-third h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
+              className="cursor-pointer border text-third border-light h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
               onClick={handleClickMainImg}
             >
               <input
@@ -194,7 +194,7 @@ function FreeAddwork() {
               รูปผลงานเพิ่มเติม (สูงสุดไม่ควรเกิน 5 รูป)
             </h1>
             <div
-              className="cursor-pointer border text-third border-third h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
+              className="cursor-pointer border text-third border-light h-[15rem] rounded-md p-2 text-lg flex items-center justify-center hover:text-secondary duration-300"
               onClick={handleClickEx}
             >
               <input
@@ -237,7 +237,7 @@ function FreeAddwork() {
           <textarea
             name="work_Exdetail"
             placeholder="รายละเอียดสิ่งที่ลูกค้าจะได้รับ"
-            className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary mt-4"
+            className="h-[10rem] w-full outline-none border border-light rounded-md p-3 text-lg text-secondary mt-4"
           ></textarea>
         </div>
 

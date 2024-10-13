@@ -20,7 +20,7 @@ export default function Card({ search, category, deadline }: CardProps) {
     const supabase = createClient();
     let { data: Freework } = await supabase
       .from("FreelanceWork")
-      .select("*, users (username, avatar_url)")
+      .select("*, users (username)")
       .order("created_at", { ascending: false });
 
     setData(Freework);
@@ -135,16 +135,7 @@ export default function Card({ search, category, deadline }: CardProps) {
                     </h1>
                     <p className="text-third text-xs">{note.work_catagory}</p>
                     <div className="card-actions mt-5 flex justify-between">
-                      <div className="text-primary text-xs flex gap-2 items-center">
-                        <div className="relative w-6 h-6 rounded-full">
-                          <Image
-                            src={note.users.avatar_url || "/De_Profile.jpeg"}
-                            alt={note.users.username}
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-full"
-                          />
-                        </div>
+                      <div className="text-primary text-xs flex gap-2 items-center w-40">
                         <p>{note.users.username}</p>
                       </div>
                       <div className="text-baht text-base">

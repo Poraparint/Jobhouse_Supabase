@@ -55,14 +55,14 @@ function CusAddwork() {
           name="work_name"
           type="text"
           placeholder="ชื่องานของคุณ"
-          className="w-full text-secondary border border-third rounded-md p-2 text-lg outline-none"
+          className="w-full text-secondary border border-light rounded-md p-2 text-lg outline-none"
           required
         />
         <div className="flex justify-between gap-9 max-lg:flex-wrap">
           <div className="w-full flex flex-col gap-5">
             <h1 className="ml-5 text-primary text-xl">หมวดหมู่งาน</h1>
             <select
-              className="border text-lg border-third p-2 rounded-md text-secondary"
+              className="border text-lg border-light p-2 rounded-md text-secondary"
               name="work_catagory"
               id=""
               required
@@ -90,7 +90,7 @@ function CusAddwork() {
             <input
               type="date"
               name="work_deadline"
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+              className="outline-none w-full border border-light rounded-md p-2 text-lg text-secondary"
               required
             />
           </div>
@@ -104,7 +104,7 @@ function CusAddwork() {
               name="work_ex"
               type="text"
               placeholder="ตย."
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+              className="outline-none w-full border border-light rounded-md p-2 text-lg text-secondary"
               required
             />
           </div>
@@ -114,7 +114,7 @@ function CusAddwork() {
               name="work_budget"
               type="text"
               placeholder="ระบุจำนวนเงินแลกเปลี่ยน"
-              className="outline-none w-full border border-third rounded-md p-2 text-lg text-secondary"
+              className="outline-none w-full border border-light rounded-md p-2 text-lg text-secondary"
               required
             />
           </div>
@@ -124,7 +124,7 @@ function CusAddwork() {
         <textarea
           name="work_detail"
           placeholder="รายละเอียดงานของคุณ "
-          className="h-[10rem] w-full outline-none border border-third rounded-md p-3 text-lg text-secondary"
+          className="h-[10rem] w-full outline-none border border-light rounded-md p-3 text-lg text-secondary"
           required
         ></textarea>
         <div className="flex justify-end text-xl gap-5 mt-14">

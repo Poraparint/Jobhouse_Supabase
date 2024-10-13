@@ -143,10 +143,10 @@ export default function UserView({ username }) {
       </div>
       {/* แสดงงานของผู้ใช้ */}
       <div className="flex justify-end px-10">
-        <div className="w-[70%] max-lg:w-full">
+        <div className="w-[70%] max-lg:w-full ">
           <div>
             {userWorks.length > 0 ? ( // แสดงงานของผู้ใช้
-              <div className="grid grid-cols-3 grid-rows-1 gap-5 max-lg:grid-cols-1 mt-8">
+              <div className="grid grid-cols-3 grid-rows-1 gap-5 max-lg:grid-cols-1 mt-8 bg-white shadow-md rounded-md p-5">
                 {userWorks.map((work) => (
                   <ShowWork key={work.id} work={work} />
                 ))}

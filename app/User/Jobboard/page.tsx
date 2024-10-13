@@ -87,11 +87,10 @@ function Jobboard() {
           <TodayDate />
         </div>
 
-        <div className="flex justify-between max-lg:flex-col">
+        <div className="flex justify-between max-lg:flex-col items-center">
           <div className="w-full flex gap-5">
             {/* ใช้ Select สำหรับกรองงานของตัวเอง */}
             <select
-              id="jobFilter"
               value={showMyJobs ? "myJobs" : "all"} // ใช้ value เป็น string เพื่อให้ตรงกับ option
               onChange={(e) => setShowMyJobs(e.target.value === "myJobs")} // อัปเดต state เมื่อมีการเปลี่ยนแปลง
               className="cursor-pointer my-5 border border-primary p-2 text-xl rounded-lg outline-none text-primary"

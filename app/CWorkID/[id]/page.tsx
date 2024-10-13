@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
-import Image from "next/image";
-import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation"; // นำเข้า useRouter
+
+import Footer from "@/components/Footer";
 import Swal from "sweetalert2";
+import ProfileButton from "@/components/ProfileButtonProps";
 
 export default function CWork({ params }: { params: { id: string } }) {
   const [work, setWork] = useState<any>(null);
@@ -16,9 +17,14 @@ export default function CWork({ params }: { params: { id: string } }) {
     const router = useRouter(); // สร้าง router
     
     const formatDate = (dateString: string) => {
-      const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-      return new Date(dateString).toLocaleDateString("th", options);
+      const options: Intl.DateTimeFormatOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      };
+      return new Date(dateString).toLocaleDateString("th-TH", options);
     };
+
 
   const fetchWorkDetails = async (id: string) => {
     const { data, error } = await supabase
@@ -82,14 +88,13 @@ export default function CWork({ params }: { params: { id: string } }) {
             // Redirect หลังจากแสดง toast
             router.push("/Customer/C_Pro_Edit");
           });        
-          router.push("/Customer/C_Pro_Edit");
           
     } else {
           console.error("Error deleting work:", error);
           Swal.fire({
             icon: "error",
             title: "เกิดข้อผิดพลาด",
-            text: "ไม่สามารถเพิ่มงานได้ โปรดลองอีกครั้ง",
+            text: "ไม่สามารถลบงานได้ โปรดลองอีกครั้ง",
           });
     }
   };
@@ -132,10 +137,6 @@ export default function CWork({ params }: { params: { id: string } }) {
                 <button className="btn btn-primary text-white">
                   คัดลอกลิ้งค์
                 </button>
-                <button className="text-third text-xl pt-2 hover:text-primary duration-200">
-                  <i className="fa-regular fa-heart mr-2"></i>
-                  บันทึก
-                </button>
               </div>
             </div>
             <div className="w-4/6 max-lg:w-full flex flex-col gap-4 tracking-wider">
@@ -177,31 +178,11 @@ export default function CWork({ params }: { params: { id: string } }) {
                   </div>
                 </div>
               </div>
-              <div className="bg-bg w-full py-3 px-6 rounded-md shadow-md">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-5 my-5">
-                    <div className="relative w-14 h-14 rounded-full">
-                      <Image
-                        src={work.users.avatar_url || "/De_Profile.jpeg"}
-                        alt={work.users.username}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                      />
-                    </div>
-                    <h1 className="text-lg font-semibold text-secondary">
-                      {work.users.username}
-                    </h1>
-                  </div>
-                  <button className="btn btn-white text-primary border-primary hover:bg-gray-50">
-                    ดูโปรไฟล์{" "}
-                    <i className="fa-solid fa-up-right-from-square ml-3"></i>
-                  </button>
-                </div>
-                <p className="text-third font-light mb-5">
-                  {work.users.userdetails}
-                </p>
-              </div>
+              <ProfileButton
+                username={work.users.username}
+                avatarUrl={work.users.avatar_url}
+                userDetails={work.users.userdetails}
+              />
               {/* แสดงปุ่มลบถ้าผู้ใช้ปัจจุบันเป็นเจ้าของงาน */}
               {isOwner && (
                 <div className="flex justify-end">

@@ -1,29 +1,25 @@
-import DeployButton from "@/components/DeployButton";
-import { createClient } from "@/utils/supabase/server";
-import Home from "@/components/Home";
-import { redirect } from "next/navigation";
-import Footer from "@/components/Footer";
+// app/ProtectedPage.tsx
 
+import { redirect } from "next/navigation"; // เอาไว้ใช้สำหรับการนำทาง
+import { createClient } from "@/utils/supabase/server"; // นำเข้า supabase client
+import OnboardingSteps from "@/components/OnboardingSteps"; // นำเข้า OnboardingSteps
+
+// สร้าง Component แบบ Server Component
 export default async function ProtectedPage() {
-  const supabase = createClient();
+  const supabase = createClient(); // สร้าง Supabase client
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser(); // ตรวจสอบผู้ใช้
 
+  // ถ้าไม่มีผู้ใช้ ให้ redirect ไปยังหน้า login
   if (!user) {
     return redirect("/login");
   }
 
   return (
-    <div className="w-full">
-      <div className="Page w-full flex flex-col gap-20">
-        <Home />
-      </div>
-
-      
-        <Footer />
-      
+    <div className="w-full Page">
+      <OnboardingSteps />
     </div>
   );
 }
