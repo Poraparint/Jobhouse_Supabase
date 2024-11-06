@@ -11,19 +11,15 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      const forwardedHost = request.headers.get("x-forwarded-host");
-      const isLocalEnv = process.env.NODE_ENV === "development";
-      const finalRedirectURL = isLocalEnv
-        ? `${origin}${next}`
-        : forwardedHost
-        ? `https://${forwardedHost}${next}`
-        : `${origin}${next}`;
-
-      return NextResponse.redirect(finalRedirectURL);
+      return NextResponse.redirect(`${origin}${next}`);
+    } else {
+      console.error("Error exchanging code for session:", error);
     }
+  } else {
+    console.error("No code provided in URL.");
   }
 
-  // ส่งข้อความแสดงข้อผิดพลาดหากเกิดปัญหาในการแลกเปลี่ยนโค้ดหรือเปลี่ยนเส้นทางไม่ได้
+  // Fallback in case of error
   return NextResponse.json(
     { message: "Something went wrong" },
     { status: 500 }
