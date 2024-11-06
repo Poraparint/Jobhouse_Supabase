@@ -13,17 +13,19 @@ export async function GET(request: Request) {
     if (!error) {
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
+      const finalRedirectURL = isLocalEnv
+        ? `${origin}${next}`
+        : forwardedHost
+        ? `https://${forwardedHost}${next}`
+        : `${origin}${next}`;
 
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
-      } else {
-        return NextResponse.redirect(`${origin}${next}`);
-      }
+      return NextResponse.redirect(finalRedirectURL);
     }
   }
 
-  // ถ้าไม่สามารถเปลี่ยนเส้นทางได้ให้แสดงข้อผิดพลาด
-  return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
+  // ส่งข้อความแสดงข้อผิดพลาดหากเกิดปัญหาในการแลกเปลี่ยนโค้ดหรือเปลี่ยนเส้นทางไม่ได้
+  return NextResponse.json(
+    { message: "Something went wrong" },
+    { status: 500 }
+  );
 }
