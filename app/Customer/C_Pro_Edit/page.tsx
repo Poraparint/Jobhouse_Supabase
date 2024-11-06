@@ -9,7 +9,7 @@ import ShowWork from "../../../components/ShowWork";
 import Footer from "@/components/Footer";
 import EditProfileForm from "./Edit/EditProfileForm"; // เรียกใช้ component ใหม่
 
-function C_Pro_Edit() {
+export default function C_Pro_Edit() {
   const supabase = createClient();
   const useuserData = useUser(); // ไม่ destructure ทันที
 
@@ -298,4 +298,3 @@ function C_Pro_Edit() {
     </div>
   );
 }
-export default C_Pro_Edit;
