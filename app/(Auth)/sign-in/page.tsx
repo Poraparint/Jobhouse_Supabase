@@ -24,7 +24,7 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${getURL()}protected`,
+        redirectTo: `https://jobhouse-supabase.vercel.app/protected`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
@@ -36,6 +36,7 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
       console.error(error);
     }
   };
+
 
   return (
     <div className="Page w-full">

@@ -11,12 +11,9 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      const isLocalEnv = process.env.NODE_ENV === "development";
-      const redirectUrl = isLocalEnv
-        ? `http://localhost:3000${next}`
-        : `https://jobhouse-supabase.vercel.app${next}`;
-
-      return NextResponse.redirect(redirectUrl);
+      return NextResponse.redirect(
+        `https://jobhouse-supabase.vercel.app${next}`
+      );
     }
   }
 
