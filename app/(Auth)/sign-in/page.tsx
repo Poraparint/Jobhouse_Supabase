@@ -24,7 +24,7 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`, // Adjusted for proper redirection
+        redirectTo: `${getURL()}protected`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
@@ -36,7 +36,6 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
       console.error(error);
     }
   };
-
 
   return (
     <div className="Page w-full">
@@ -112,8 +111,7 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
               href="/sign-up"
               className="text-sm text-secondary font-bold hover:underline"
             >
-              สมัครสมาชิก{" "}
-              <i className="fa-solid fa-arrow-right ml-1"></i>
+              สมัครสมาชิก <i className="fa-solid fa-arrow-right ml-1"></i>
             </Link>
           </div>
 
