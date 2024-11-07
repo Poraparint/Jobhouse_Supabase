@@ -14,7 +14,7 @@ export default async function ProtectedPage() {
 
   // ถ้าไม่มีผู้ใช้ ให้ redirect ไปยังหน้า login
   if (!user) {
-    return redirect("/login");
+    return redirect("/sign-in");
   }
 
   return (
