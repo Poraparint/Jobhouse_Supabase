@@ -7,7 +7,7 @@ import { useUser } from "@/hooks/useUser";
 import Link from "next/link";
 import ShowWork from "../../../components/ShowWork";
 import Footer from "@/components/Footer";
-import EditProfileForm from "./Edit/EditProfileForm"; // เรียกใช้ component ใหม่
+import Swal from "sweetalert2";
 
 export default function C_Pro_Edit() {
   const supabase = createClient();
@@ -16,27 +16,32 @@ export default function C_Pro_Edit() {
   const [userData, setUserData] = useState<any>(null);
   const [works, setWorks] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false); // State สำหรับเปิดปิด modal
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState("/De_Profile.jpeg");
+  const [username, setUsername] = useState("");
+  const [newImage, setNewImage] = useState<File | null>(null);
   const [showEdit, setShowEdit] = useState(false); // State สำหรับเปิดปิด modal
   const [showWorks, setShowWorks] = useState(true); // เพิ่ม state สำหรับจัดการการแสดง ShowWork
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const useuser = useuserData?.user;
   const isUserLoading = useuserData?.isLoading;
   const userError = useuserData?.error;
 
-  // ฟังก์ชันสำหรับดึงข้อมูลผู้ใช้
   const fetchUserData = async () => {
     try {
       const { data: userData, error } = await supabase
         .from("users")
-        .select("username, avatar_url, userdetails, bg_url, fb_url, ig_url, line_url")
+        .select("username, avatar_url")
         .eq("id", useuser.id)
         .limit(1)
-        .single(); // ดึงข้อมูลผู้ใช้หนึ่งคน
-
+        .single();
       if (error) throw error;
       if (userData) {
-        setUserData(userData); // บันทึกข้อมูลผู้ใช้
+        setUserData(userData);
+        setUsername(userData.username);
+        setProfileImage(userData.avatar_url || "/De_Profile.jpeg");
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -60,6 +65,48 @@ export default function C_Pro_Edit() {
       console.error("Error fetching works:", error);
     }
   };
+  const handleProfileUpdate = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("username", username);
+    if (newImage) {
+      formData.append("profile", newImage);
+    }
+
+    try {
+      const response = await supabase
+        .from("users")
+        .update({
+          username,
+          avatar_url: newImage
+            ? URL.createObjectURL(newImage)
+            : userData.avatar_url,
+        })
+        .eq("id", useuser.id);
+
+      if (response.error) {
+        setError(response.error.message);
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "อัปเดตโปรไฟล์สำเร็จ",
+          showConfirmButton: false,
+          timer: 1000,
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    } catch (err) {
+      setError("Error updating profile: " + (err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (useuser && !isUserLoading) {
@@ -81,8 +128,6 @@ export default function C_Pro_Edit() {
   if (!useuser) {
     return <div>User not logged in</div>;
   }
-
-  console.log(userData);
 
   return (
     <div className="w-full mt-14">
@@ -255,8 +300,70 @@ export default function C_Pro_Edit() {
               </div>
             )}
             {showEdit && ( // ตรวจสอบเงื่อนไข showEdit
-              <div className="mt-8">
-                <EditProfileForm user={userData} />
+              <div
+                className="modal modal-open"
+                onClick={() => setIsModalOpen(false)} // Close on background click
+              >
+                <div
+                  className="modal-box bg-bg text-text"
+                  onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+                >
+                  <form onSubmit={handleProfileUpdate}>
+                    <div className="flex flex-col gap-3">
+                      <label className="block text-sm font-medium">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="input w-full bg-bg border-text"
+                        required
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3 mt-5">
+                      <label className="block text-sm font-medium ">
+                        Profile Image
+                      </label>
+                      <div className="relative w-24 h-24 rounded-full hover:opacity-90 hover:scale-105 duration-150">
+                        <Image
+                          className="rounded-full"
+                          src={profileImage}
+                          alt="Profile"
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                        <input
+                          type="file"
+                          className="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setNewImage(file);
+                            if (file) {
+                              setProfileImage(URL.createObjectURL(file));
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-end mt-5">
+                      <button
+                        type="submit"
+                        className="btn bg-pain text-bg border-bg"
+                      >
+                        บันทึก
+                      </button>
+                    </div>
+                  </form>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      className="btn bg-bg text-text p-4"
+                      onClick={() => setIsModalOpen(false)} // Close modal
+                    >
+                      ปิด
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>

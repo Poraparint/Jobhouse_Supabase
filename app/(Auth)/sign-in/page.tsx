@@ -24,7 +24,7 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${getURL()}auth/callback`,
+        redirectTo: `${getURL()}protected`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
@@ -36,7 +36,6 @@ function SignInPage({ searchParams }: { searchParams: { message: string } }) {
       console.error(error);
     }
   };
-
   return (
     <div className="Page w-full">
       <div className="flex justify-center w-5/6 grow bg-white backdrop-blur-sm rounded-3xl py-16 px-10 shadow-lg mx-auto">

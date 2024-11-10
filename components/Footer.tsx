@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     
     <footer className='bg-primary mt-[40rem] max-md:hidden items-center flex justify-between text-white tracking-wide w-full'>
-      <DeployButton/>
+      <div>Jobhouse</div>
         <div className='upper-footer w-[70%] py-10 gap-[5rem] justify-end flex'>
           <div>
             <h1 className='font-semibold text-2xl'>Menu</h1>
