@@ -185,6 +185,6 @@ import React from 'react'
 
 export default function page() {
   return (
-    <div>กำลังแก้ไข...</div>
+    <div className='Page text-4xl'>กำลังแก้ไข...</div>
   )
 }
